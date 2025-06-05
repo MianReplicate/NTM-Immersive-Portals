@@ -14,6 +14,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.blockentities.InteriorDoorTile;
 import net.tardis.mod.blockentities.exteriors.ExteriorTile;
+import net.tardis.mod.cap.Capabilities;
+import net.tardis.mod.cap.level.ITardisLevel;
 import net.tardis.mod.helpers.WorldHelper;
 import net.tardis.mod.misc.IDoor;
 import net.tardis.mod.misc.TeleportEntry;
@@ -45,17 +47,34 @@ public class TeleportHandlerMixin<T> implements Portalable {
 
     @Inject(remap=false, cancellable = true, method = "tick", at = @At(target = "Ljava/util/function/Function;apply(Ljava/lang/Object;)Ljava/lang/Object;", value = "INVOKE"))
     public void ntm_immersive_portals$tick(ServerLevel level, CallbackInfo ci){
-        if(parent instanceof IDoor door){
+        if(parent instanceof ExteriorTile || parent instanceof InteriorDoorTile){
             ServerLevel target = this.targetDimSupplier.apply(level);
             if (this.shouldTeleport.get() && target != null) {
                 Vec3 origin = this.teleportBounds.get().getCenter();
                 Vec3 dest = this.positionSupplier.apply(target, null).position();
 
                 float y = 0;
-                if(door instanceof ExteriorTile tile){
-                     y = tile.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot();
-                } else if(door instanceof InteriorDoorTile tile){
-                    y = tile.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING).getOpposite().toYRot();
+                if(parent instanceof ExteriorTile tile){
+                    ITardisLevel tardis = tile.getTardis().orElse(null);
+                    if(tardis == null)
+                        return;
+
+                     y = WorldHelper.getFacingAngle(tile.getBlockState());
+
+                    Direction intDir = Direction.fromYRot(tardis.getInteriorManager().getMainInteriorDoor().getRotation(tardis));
+                    dest = dest.relative(intDir, -1);
+
+                    Direction extDir = tardis.getLocation().getDirection();
+                    origin = origin.relative(extDir, 0.5);
+                } else if(parent instanceof InteriorDoorTile tile){
+                    ITardisLevel tardis = level.getCapability(Capabilities.TARDIS).orElse(null);
+                    if(tardis == null)
+                        return;
+
+                    y = WorldHelper.getFacingAngle(tile.getBlockState());
+
+                    Direction extDir = tardis.getLocation().getDirection();
+                    dest = dest.relative(extDir, 0.5);
                 }
 //                if(door instanceof ExteriorTile tile)
 //                    dest = WorldHelper.centerOfBlockPos(doorTile.getBlockPos().relative(WorldHelper.getHorizontalFacing(doorTile.getBlockState())))
