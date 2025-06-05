@@ -8,6 +8,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 //TODO: Current Bugs
+// Dim IDs arent always being synced over properly? Client isnt getting all the ids ?
+// Fix rotation and position of portals
+// Portals dont get removed always (maybe need to save ids)
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(NTMIP.MODID)

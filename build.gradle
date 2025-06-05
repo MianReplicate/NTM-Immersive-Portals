@@ -95,13 +95,17 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven { url "https://maven.commoble.net/" }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     implementation(fg.deobf("Spectre0987:Tardis-Mod:$tardis_mod_version"))
-    implementation(fg.deobf("quoteall:immersive-portals:$immersive_portals_version:all"))
+    implementation fg.deobf("commoble.infiniverse:infiniverse-1.20.1:1.0.0.5")
+    implementation fg.deobf("quoteall:immersive-portals:$immersive_portals_version:all"){
+        transitive(false)
+    }
     implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:$cloth_config_version"))
 
 //    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
