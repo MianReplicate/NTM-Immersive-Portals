@@ -42,4 +42,17 @@ public class PortalHelper {
 
         return portal;
     }
+
+    public static void adjustPortalsToConnectAndSync(Portal a, Portal b){
+        DQuaternion aRotation = a.getRotation();
+        DQuaternion bRotation = b.getRotation();
+
+        PortalManipulation.adjustRotationToConnect(a, b);
+
+        if(aRotation == null || !aRotation.equals(a.getRotation()))
+            a.reloadAndSyncToClient();
+
+        if(bRotation == null || !bRotation.equals(b.getRotation()))
+            b.reloadAndSyncToClient();
+    }
 }

@@ -4,10 +4,13 @@ import mian.minecraft.ntm_ip.NTMIP;
 import mian.minecraft.ntm_ip.api.Portalable;
 import mian.minecraft.ntm_ip.api.PublicDoorData;
 import mian.minecraft.ntm_ip.helper.PortalHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.blockentities.exteriors.ExteriorTile;
@@ -16,7 +19,6 @@ import net.tardis.mod.helpers.WorldHelper;
 import net.tardis.mod.misc.DoorHandler;
 import net.tardis.mod.misc.tardis.InteriorDoorData;
 import net.tardis.mod.misc.tardis.InteriorManager;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import qouteall.imm_ptl.core.McHelper;
 import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
@@ -46,27 +49,42 @@ public abstract class InteriorManagerMixin implements Portalable {
 
     @Redirect(method = "getMainInteriorDoor", at = @At(value = "INVOKE",
             target = "Lorg/apache/logging/log4j/Logger;log(Lorg/apache/logging/log4j/Level;Ljava/lang/String;)V"))
-    public void getMainInteriorDoor(Logger instance, Level level, String s){
+    public void getMainInteriorDoor(Logger instance, org.apache.logging.log4j.Level level, String s){
         // shut the fuck up
+    }
+
+    @Inject(method = "serializeNBT()Lnet/minecraft/nbt/CompoundTag;", at = @At(value = "RETURN"))
+    public void ntm_immersive_portals_$serializeNBT(CallbackInfoReturnable<CompoundTag> cir){
+        CompoundTag compoundTag = cir.getReturnValue();
+        compoundTag.putInt("exterior_portal", ntm_immersive_portals$exterior);
+        compoundTag.putInt("interior_portal", ntm_immersive_portals$interior);
+    }
+
+    @Inject(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"))
+    public void ntm_immersive_portals_$deserializeNBT(CompoundTag tag, CallbackInfo ci){
+        ntm_immersive_portals$exterior = tag.getInt("exterior_portal");
+        ntm_immersive_portals$interior = tag.getInt("interior_portal");
     }
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void ntm_immersive_portals$tick(CallbackInfo ci){
-        BlockEntity entity = tardis.getLevel().getServer().getLevel(tardis.getLocation().getLevel()).getBlockEntity(tardis.getLocation().getPos());
+        if(!tardis.isClient()){
+            BlockEntity entity = ((ServerLevel)tardis.getLevel()).getServer().getLevel(tardis.getLocation().getLevel()).getBlockEntity(tardis.getLocation().getPos());
 
-        if(!tardis.isClient() && entity instanceof ExteriorTile exteriorTile){
-            boolean shouldTeleport = getDoorHandler().getDoorState().isOpen();
+            if(entity instanceof ExteriorTile exteriorTile){
+                boolean shouldTeleport = getDoorHandler().getDoorState().isOpen();
 
-            if (shouldTeleport) {
-                Portal exterior = ntm_immersive_portals$createOrEditExterior(exteriorTile);
-                ntm_immersive_portals$setExterior(exterior);
+                if (shouldTeleport) {
+                    Portal exterior = ntm_immersive_portals$createOrEditExterior(exteriorTile);
+                    ntm_immersive_portals$setExterior(exterior);
 
-                Portal interior = ntm_immersive_portals$createOrEditInterior(tardis, exteriorTile);
-                ntm_immersive_portals$setInterior(interior);
+                    Portal interior = ntm_immersive_portals$createOrEditInterior(tardis, exteriorTile);
+                    ntm_immersive_portals$setInterior(interior);
 
-                PortalManipulation.adjustRotationToConnect(exterior, interior);
-            } else {
-                ntm_immersive_portals$removePortals();
+                    PortalHelper.adjustPortalsToConnectAndSync(interior, exterior);
+                } else {
+                    ntm_immersive_portals$removePortals();
+                }
             }
         }
     }
@@ -92,10 +110,11 @@ public abstract class InteriorManagerMixin implements Portalable {
 
 
         if(portal != null && !level.equals(portal.getOriginWorld())) {
+            NTMIP.LOGGER.info("killed!");
             PortalHelper.removePortal(portal.getOriginWorld(), portal.getId());
         }
 
-        ResourceKey<net.minecraft.world.level.Level> targetDim = tardis.getId();
+        ResourceKey<Level> targetDim = tardis.getId();
         if(portal == null || !portal.isAlive()){
             portal = PortalHelper.createPortal(
                     level,
@@ -140,22 +159,24 @@ public abstract class InteriorManagerMixin implements Portalable {
     @Unique
     public Portal ntm_immersive_portals$createOrEditInterior(ITardisLevel tardis, ExteriorTile exteriorTile){
         ServerLevel level = (ServerLevel) tardis.getLevel();
-        Portal portal = ntm_immersive_portals$getExterior();
+        Portal portal = ntm_immersive_portals$getInterior();
 
         InteriorDoorData door = tardis.getInteriorManager().getMainInteriorDoor();
         Vec3 origin = door.getPosition(level);
         Vec3 dest = tardis.getLocation().getPos().getCenter();
 
-        float y = door.getRotation(tardis);
+        float y = WorldHelper.getHorizontalFacing(level.getBlockState(BlockPos.containing(door.getPosition(level))))
+                .toYRot();
 
         Direction extDir = WorldHelper.getHorizontalFacing(exteriorTile.getBlockState());
         dest = dest.relative(extDir, 0.75);
 
         if(portal != null && !level.equals(portal.getOriginWorld())) {
+            NTMIP.LOGGER.info("killed!");
             PortalHelper.removePortal(portal.getOriginWorld(), portal.getId());
         }
 
-        ResourceKey<net.minecraft.world.level.Level> targetDim = tardis.getId();
+        ResourceKey<Level> targetDim = tardis.getLocation().getLevel();
         if(portal == null || !portal.isAlive()){
             portal = PortalHelper.createPortal(
                     level,
@@ -199,10 +220,10 @@ public abstract class InteriorManagerMixin implements Portalable {
 
     @Override
     public void ntm_immersive_portals$removePortals() {
-        PortalHelper.removePortal(this.tardis.getLevel().getServer().getLevel(this.tardis.getLocation().getLevel()), ntm_immersive_portals$exterior);
+        PortalHelper.removePortal(ntm_immersive_portals$getExteriorLevel(tardis), ntm_immersive_portals$exterior);
         ntm_immersive_portals$exterior = 0;
 
-        PortalHelper.removePortal(this.tardis.getLevel(), ntm_immersive_portals$interior);
+        PortalHelper.removePortal(ntm_immersive_portals$getInteriorLevel(tardis), ntm_immersive_portals$interior);
         ntm_immersive_portals$interior = 0;
     }
 
@@ -217,23 +238,35 @@ public abstract class InteriorManagerMixin implements Portalable {
     @Override
     public void ntm_immersive_portals$setInterior(@Nullable Portal start) {
         if(start == null){
-            this.ntm_immersive_portals$exterior = 0;
+            this.ntm_immersive_portals$interior = 0;
         } else {
-            this.ntm_immersive_portals$exterior = start.getId();
+            this.ntm_immersive_portals$interior = start.getId();
         }
     }
     @Override
     public Portal ntm_immersive_portals$getExterior() {
-        Entity portal = ((BlockEntity)(Object) this).getLevel().getEntity(ntm_immersive_portals$exterior);
+        Entity portal = ntm_immersive_portals$getExteriorLevel(tardis)
+                .getEntity(ntm_immersive_portals$exterior);
         if(portal != null)
             return (Portal) portal;
         return null;
     }
     @Override
     public Portal ntm_immersive_portals$getInterior() {
-        Entity portal = ((BlockEntity)(Object) this).getLevel().getEntity(ntm_immersive_portals$interior);
+        Entity portal =  ntm_immersive_portals$getInteriorLevel(tardis)
+                .getEntity(ntm_immersive_portals$interior);
         if(portal != null)
             return (Portal) portal;
         return null;
+    }
+
+    @Unique
+    private static Level ntm_immersive_portals$getInteriorLevel(ITardisLevel tardis){
+        return tardis.getLevel();
+    }
+
+    @Unique
+    private static Level ntm_immersive_portals$getExteriorLevel(ITardisLevel tardis){
+        return ((ServerLevel) tardis.getLevel()).getServer().getLevel(tardis.getLocation().getLevel());
     }
 }
