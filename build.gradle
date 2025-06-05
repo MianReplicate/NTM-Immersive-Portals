@@ -38,7 +38,7 @@ minecraft {
 
             property 'mixin.debug.export', 'true'
             properties 'mixin.env.disableRefMap': 'false'
-            jvmArgs '-XX:+AllowEnhancedClassRedefinition', '-XX:HotswapAgent=fatjar', "-XX:+AllowRedefinitionToAddDeleteMethods", '-XX:+IgnoreUnrecognizedVMOptions'
+            jvmArgs '-XX:+AllowEnhancedClassRedefinition', "-XX:+AllowRedefinitionToAddDeleteMethods", '-XX:+IgnoreUnrecognizedVMOptions'
 
             mods {
                 "${mod_id}" {
@@ -104,7 +104,11 @@ dependencies {
     implementation(fg.deobf("quoteall:immersive-portals:$immersive_portals_version:all"))
     implementation(fg.deobf("me.shedaniel.cloth:cloth-config-forge:$cloth_config_version"))
 
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+//    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:$mixin_extras_version"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:$mixin_extras_version")) {
+        jarJar.ranged(it, "[$mixin_extras_version,)")
+    }
 
 }
 

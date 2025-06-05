@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "ntm_ip.refmap.json",
   "mixins": [
+    "InteriorDoorDataMixin",
     "TeleportHandlerMixin"
   ],
   "client": [
