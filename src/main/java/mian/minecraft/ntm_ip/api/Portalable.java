@@ -2,6 +2,8 @@ package mian.minecraft.ntm_ip.api;
 
 import qouteall.imm_ptl.core.portal.Portal;
 
+import java.util.UUID;
+
 public interface Portalable {
     void ntm_immersive_portals$setPortal(Portal portal);
     void ntm_immersive_portals$removePortal();

@@ -1,6 +1,7 @@
 package mian.minecraft.ntm_ip.helper;
 
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import qouteall.imm_ptl.core.platform_specific.IPRegistry;
@@ -8,9 +9,14 @@ import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.q_misc_util.my_util.DQuaternion;
 
+import javax.annotation.Nullable;
+import java.util.UUID;
+
 public class PortalHelper {
-    public static void removePortal(Portal portal){
-        portal.kill();
+    public static void removePortal(Level level, int portalID){
+        Entity portal = level.getEntity(portalID);
+        if(portal instanceof Portal portal1 && portal1 != null && portal1.isAlive())
+            portal1.kill();
     }
 
     public static Portal createPortal(Level level, // org level

@@ -5,8 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "ntm_ip.refmap.json",
   "mixins": [
+    "DimensionHelperMixin",
+    "ExteriorTileMixin",
     "InteriorDoorDataMixin",
-    "TeleportHandlerMixin"
+    "InteriorDoorTileMixin",
+    "InteriorManagerMixin"
   ],
   "client": [
   ],
