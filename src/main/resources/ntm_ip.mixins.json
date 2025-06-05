@@ -2,9 +2,10 @@
   "required": true,
   "minVersion": "0.8",
   "package": "mian.minecraft.ntm_ip.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "ntm_ip.refmap.json",
   "mixins": [
+    "TeleportHandlerMixin"
   ],
   "client": [
   ],

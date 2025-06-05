@@ -64,7 +64,7 @@ side = "BOTH"
 
 # immersive portals
 [[dependencies."${mod_id}"]]
-modId = "immersive-portals"
+modId = "immersive_portals"
 mandatory = true
 versionRange = "[${immersive_portals_version},)"
 ordering = "NONE"
