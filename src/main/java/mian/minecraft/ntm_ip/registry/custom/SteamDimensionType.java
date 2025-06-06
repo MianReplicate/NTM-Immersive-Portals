@@ -10,12 +10,12 @@ public class SteamDimensionType extends ExteriorDimensionType {
     public SteamDimensionType(){
         super(
                 (level) -> {
-                    Direction extDirection = DirectionHelper.getExteriorDirection(level).getOpposite();
+                    Direction extDirection = DirectionHelper.getExteriorDirection(level);
                     Vec3 extOffset = new Vec3(0, 0, 0);
 
-                    Direction intDirection = DirectionHelper.getInteriorDirection(level).getOpposite();
+                    Direction intDirection = DirectionHelper.getInteriorDirection(level);
                     Vec3 intOffset = new Vec3(0, 0, 0);
-                    return new Pair<>(extOffset.relative(extDirection, 0.75), intOffset.relative(intDirection, 2));
+                    return new Pair<>(extOffset.relative(extDirection, 0.75), intOffset.relative(intDirection, 0));
                 },
                 (level) -> new Pair<>(new Pair<>(1D, 2D), new Pair<>(1D, 2D))
         );

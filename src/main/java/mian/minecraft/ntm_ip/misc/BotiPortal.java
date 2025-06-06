@@ -15,9 +15,16 @@ import java.util.UUID;
 
 public class BotiPortal extends Portal {
     private static final EntityDataAccessor<Optional<UUID>> TARDIS_ID = SynchedEntityData.defineId(BotiPortal.class, EntityDataSerializers.OPTIONAL_UUID);
+    private boolean valid = false;
 
     public BotiPortal(EntityType<?> entityType, Level world) {
         super(entityType, world);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.getEntityData().define(TARDIS_ID, Optional.of(UUID.randomUUID()));
     }
 
     public UUID getTardisId(){
@@ -26,6 +33,14 @@ public class BotiPortal extends Portal {
 
     public void setTardisId(UUID uuid){
         this.entityData.set(TARDIS_ID, Optional.of(uuid));
+    }
+
+    public void setValid(boolean valid){
+        this.valid = valid;
+    }
+
+    public boolean getValid(){
+        return valid;
     }
 
     @Override
@@ -37,15 +52,14 @@ public class BotiPortal extends Portal {
     public boolean isPortalValid() {
         UUID tardisId = getTardisId();
 
-        if (!this.level().isClientSide) {
-            List<BotiPortal> portalList = Portals.tardisToPortals.get(tardisId);
-            if(portalList == null ||
-                    portalList.stream().filter(portal -> portal.getUUID() == this.getUUID()).findAny().isEmpty())
+        if (level() instanceof ServerLevel) {
+            List<BotiPortal> portalList = Portals.getPortalsForTardis(tardisId);
+            if(portalList.stream().filter(portal -> portal.getUUID() == this.getUUID()).findAny().isEmpty()
+            && !this.level().isClientSide)
                 return false;
 
-            if(!this.getOriginWorld().isClientSide()) {
+            if(!getValid())
                 return false;
-            }
         }
 
         return super.isPortalValid();
@@ -58,6 +72,7 @@ public class BotiPortal extends Portal {
         if (tardisId != null) {
             compoundTag.putUUID("tardis_id", tardisId);
         }
+        compoundTag.putBoolean("valid", getValid());
     }
 
     @Override
@@ -66,5 +81,6 @@ public class BotiPortal extends Portal {
         if (compoundTag.contains("tardis_id")) {
             setTardisId(compoundTag.getUUID("tardis_id"));
         }
+        setValid(compoundTag.getBoolean("valid"));
     }
 }

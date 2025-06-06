@@ -9,8 +9,7 @@
     "ExteriorTileMixin",
     "InteriorDoorDataMixin",
     "InteriorDoorTileMixin",
-    "InteriorManagerMixin",
-    "PortalMixin"
+    "InteriorManagerMixin"
   ],
   "client": [
   ],
