@@ -23,6 +23,5 @@ public class DirectionHelper {
         return WorldHelper.getHorizontalFacing(
                 tardis.getLevel().getBlockState(
                         BlockPos.containing(tardis.getInteriorManager().getMainInteriorDoor().getPosition(tardis.getLevel()))));
-        )
     }
 }

@@ -1,5 +1,7 @@
 package mian.minecraft.ntm_ip.helper;
 
+import mian.minecraft.ntm_ip.misc.BotiPortal;
+import mian.minecraft.ntm_ip.registry.EntityTypeRegistry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -20,15 +22,15 @@ public class PortalHelper {
             portal1.kill();
     }
 
-    public static Portal createPortal(Level level, // org level
-                                      Vec3 origin, // pos
-                                      Vec3 destination, // dest
-                                      ResourceKey<Level> destinationLvl, // level to go
-                                      DQuaternion quat, // rotation
-                                      double width,
-                                      double height
+    public static BotiPortal createPortal(Level level, // org level
+                                          Vec3 origin, // pos
+                                          Vec3 destination, // dest
+                                          ResourceKey<Level> destinationLvl, // level to go
+                                          DQuaternion quat, // rotation
+                                          double width,
+                                          double height
     ) {
-        Portal portal = IPRegistry.PORTAL.get().create(level);
+        BotiPortal portal = EntityTypeRegistry.BOTI_PORTAL.get().create(level);
 
         portal.setOriginPos(origin);
         portal.setDestinationDimension(destinationLvl);

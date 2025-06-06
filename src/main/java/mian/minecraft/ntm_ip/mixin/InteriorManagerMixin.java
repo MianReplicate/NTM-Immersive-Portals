@@ -1,22 +1,17 @@
 package mian.minecraft.ntm_ip.mixin;
 
 import mian.minecraft.ntm_ip.NTMIP;
-import mian.minecraft.ntm_ip.api.PortalImpl;
 import mian.minecraft.ntm_ip.api.Portalable;
-import mian.minecraft.ntm_ip.api.PublicDoorData;
 import mian.minecraft.ntm_ip.helper.PortalHelper;
 import mian.minecraft.ntm_ip.misc.Portals;
+import mian.minecraft.ntm_ip.registry.ExteriorDimensionRegistry;
+import mian.minecraft.ntm_ip.registry.ExteriorDimensionType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.blockentities.exteriors.ExteriorTile;
 import net.tardis.mod.cap.level.ITardisLevel;
@@ -33,8 +28,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import oshi.util.tuples.Pair;
 import qouteall.imm_ptl.core.McHelper;
+import qouteall.imm_ptl.core.platform_specific.IPRegistry;
 import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.q_misc_util.my_util.DQuaternion;
@@ -77,11 +73,11 @@ public abstract class InteriorManagerMixin implements Portalable {
                     }
                     Portals.tardisToPortals.putIfAbsent(tardisID, portals);
 
-                    Portal exterior = ntm_immersive_portals$createOrEditExterior(exteriorTile, tardisID, portals);
-                    ntm_immersive_portals$setExterior(exterior);
-
                     Portal interior = ntm_immersive_portals$createOrEditInterior(tardis, exteriorTile, tardisID, portals);
                     ntm_immersive_portals$setInterior(interior);
+
+                    Portal exterior = ntm_immersive_portals$createOrEditExterior(exteriorTile, tardisID, portals);
+                    ntm_immersive_portals$setExterior(exterior);
 
                     PortalHelper.adjustPortalsToConnectAndSync(interior, exterior);
                 } else {
@@ -96,19 +92,23 @@ public abstract class InteriorManagerMixin implements Portalable {
         ServerLevel level = (ServerLevel) exteriorTile.getLevel();
         Portal portal = ntm_immersive_portals$getExterior();
 
-        Vec3 origin = exteriorTile.getBlockPos().getCenter();
-        InteriorDoorData doorData = tardis.getInteriorManager().getMainInteriorDoor();
-        if(tardis.getInteriorManager().getMainDoorID().isEmpty())
-            tardis.getInteriorManager().setMainDoor(((PublicDoorData) doorData).ntm_immersive_portals$getUUID());
-        Vec3 dest = tardis.getInteriorManager().getMainInteriorDoor().getPosition(tardis.getLevel());
-
-        float y = WorldHelper.getHorizontalFacing(exteriorTile.getBlockState()).toYRot();
-
-        Direction intDir = Direction.fromYRot(tardis.getInteriorManager().getMainInteriorDoor().getRotation(tardis));
-        dest = dest.relative(intDir, -2);
-
-        Direction extDir = WorldHelper.getHorizontalFacing(exteriorTile.getBlockState());
-        origin = origin.relative(extDir, 0.75);
+//        Vec3 origin = exteriorTile.getBlockPos().getCenter();
+//        InteriorDoorData doorData = tardis.getInteriorManager().getMainInteriorDoor();
+//        if(tardis.getInteriorManager().getMainDoorID().isEmpty())
+//            tardis.getInteriorManager().setMainDoor(((PublicDoorData) doorData).ntm_immersive_portals$getUUID());
+//        Vec3 dest = tardis.getInteriorManager().getMainInteriorDoor().getPosition(tardis.getLevel());
+//
+//        float y = WorldHelper.getHorizontalFacing(exteriorTile.getBlockState()).toYRot();
+//
+//        ExteriorDimensionType dimensionType = ExteriorDimensionRegistry.getDimensionType(tardis);
+//        Pair<Vec3, Vec3> positions = dimensionType.getPositions(tardis);
+//        origin = origin.add(positions.getA());
+//        dest = dest.add(positions.getB());
+//        Direction intDir = Direction.fromYRot(tardis.getInteriorManager().getMainInteriorDoor().getRotation(tardis));
+//        dest = dest.relative(intDir, -2);
+//
+//        Direction extDir = WorldHelper.getHorizontalFacing(exteriorTile.getBlockState());
+//        origin = origin.relative(extDir, 0.75);
 
 
         if(portal != null && !level.dimension().equals(portal.getOriginDim())) {
@@ -116,17 +116,23 @@ public abstract class InteriorManagerMixin implements Portalable {
             PortalHelper.removePortal((ServerLevel) portal.getOriginWorld(), portal.getUUID());
         }
 
+        // interior needed
+        Portal interior = ntm_immersive_portals$getInterior();
         ResourceKey<Level> targetDim = tardis.getId();
         if(portal == null || !portal.isAlive()){
-            portal = PortalHelper.createPortal(
-                    level,
-                    origin,
-                    dest, // maybe work??,
-                    targetDim,
-                    DQuaternion.rotationByDegrees(new Vec3(0, -1, 0), y),
-                    1,
-                    2
+            portal = PortalManipulation.createFlippedPortal(
+                    interior,
+                    IPRegistry.PORTAL.get()
             );
+//            portal = PortalHelper.createPortal(
+//                    level,
+//                    origin,
+//                    dest, // maybe work??,
+//                    targetDim,
+//                    DQuaternion.rotationByDegrees(new Vec3(0, -1, 0), y),
+//                    sizes.getA().getA(),
+//                    sizes.getA().getB()
+//            );
             portal.setInteractable(false);
             portal.animation.defaultAnimation.durationTicks = 0;
             portal.setIsVisible(true);
@@ -137,22 +143,22 @@ public abstract class InteriorManagerMixin implements Portalable {
             McHelper.spawnServerEntity(portal);
 
             NTMIP.LOGGER.info("Created portal!");
-            NTMIP.LOGGER.info("Origin:"+ origin.toString());
-            NTMIP.LOGGER.info("Dest:"+ dest.toString());
+            NTMIP.LOGGER.info("Origin:"+ portal.getOriginPos().toString());
+            NTMIP.LOGGER.info("Dest:"+ portal.getDestPos().toString());
             NTMIP.LOGGER.info("Origin Dim:"+ level.toString());
             NTMIP.LOGGER.info("Dest Dim:"+ targetDim.toString());
         }
 
-        if(!origin.equals(portal.getOriginPos())
-                || !dest.equals(portal.getDestPos())
-                || !targetDim.equals(portal.getDestDim())){
-            NTMIP.LOGGER.info("Origin:"+ origin.toString());
-            NTMIP.LOGGER.info("Dest:"+ dest.toString());
-            NTMIP.LOGGER.info("Origin Dim:"+ level.toString());
-            NTMIP.LOGGER.info("Dest Dim:"+ targetDim.toString());
+        if(!interior.getDestPos().equals(portal.getOriginPos())
+                || !interior.getOriginPos().equals(portal.getDestPos())
+                || !interior.getOriginDim().equals(portal.getDestDim())){
+//            NTMIP.LOGGER.info("Origin:"+ origin.toString());
+//            NTMIP.LOGGER.info("Dest:"+ dest.toString());
+//            NTMIP.LOGGER.info("Origin Dim:"+ level.toString());
+//            NTMIP.LOGGER.info("Dest Dim:"+ targetDim.toString());
 
-            portal.setOriginPos(origin);
-            portal.setPos(dest);
+            portal.setOriginPos(interior.getDestPos());
+            portal.setPos(interior.getOriginPos());
             portal.setDestinationDimension(tardis.getLocation().getLevel());
             portal.reloadAndSyncToClient();
         }
@@ -171,8 +177,13 @@ public abstract class InteriorManagerMixin implements Portalable {
         float y = WorldHelper.getHorizontalFacing(level.getBlockState(BlockPos.containing(door.getPosition(level))))
                 .toYRot();
 
-        Direction extDir = WorldHelper.getHorizontalFacing(exteriorTile.getBlockState());
-        dest = dest.relative(extDir, 0.75);
+        ExteriorDimensionType dimensionType = ExteriorDimensionRegistry.getDimensionType(tardis);
+        Pair<Vec3, Vec3> positions = dimensionType.getPositions(tardis);
+        origin = origin.add(positions.getB());
+        dest = dest.add(positions.getA());
+
+//        Direction extDir = WorldHelper.getHorizontalFacing(exteriorTile.getBlockState());
+//        dest = dest.relative(extDir, 0.75);
 
         if(portal != null && !level.dimension().equals(portal.getOriginDim())) {
             NTMIP.LOGGER.info("Killed interior because levels aren't equal!\nExpected: "+level+"\nGot:"+portal.getOriginWorld());
@@ -181,14 +192,16 @@ public abstract class InteriorManagerMixin implements Portalable {
 
         ResourceKey<Level> targetDim = tardis.getLocation().getLevel();
         if(portal == null || !portal.isAlive()){
+            Pair<Pair<Double, Double>, Pair<Double, Double>> sizes = dimensionType.getSizes(tardis);
+
             portal = PortalHelper.createPortal(
                     level,
                     origin,
                     dest, // maybe work??,
                     targetDim,
                     DQuaternion.rotationByDegrees(new Vec3(0, -1, 0), y),
-                    1,
-                    2
+                    sizes.getB().getA(),
+                    sizes.getB().getB()
             );
             portal.setInteractable(false);
             portal.animation.defaultAnimation.durationTicks = 0;

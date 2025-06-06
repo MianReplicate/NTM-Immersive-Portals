@@ -7,5 +7,5 @@ import java.util.List;
 import java.util.UUID;
 
 public class Portals {
-    public static HashMap<UUID, List<Portal>> tardisToPortals = new HashMap<>();
+    public static HashMap<UUID, List<BotiPortal>> tardisToPortals = new HashMap<>();
 }
