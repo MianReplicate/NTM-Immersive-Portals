@@ -6,7 +6,7 @@ import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.cap.level.ITardisLevel;
 import oshi.util.tuples.Pair;
 
-public class OctaType extends ChameleonType {
+public class OctaType extends DefaultType {
     @Override
     public Pair<Double, Double> getInteriorSize(ITardisLevel level) {
         return new Pair<>(1D, 2.2D);

@@ -6,21 +6,21 @@ import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.cap.level.ITardisLevel;
 import oshi.util.tuples.Pair;
 
-public class CapsuleType extends ChameleonType {
+public class CapsuleType extends DefaultType {
     @Override
     public Pair<Double, Double> getInteriorSize(ITardisLevel level) {
-        return new Pair<>(1D, 2.2D);
+        return new Pair<>(1D, 2.4D);
     }
 
     @Override
     public Pair<Double, Double> getExteriorSize(ITardisLevel level) {
-        return new Pair<>(1D, 2.2D);
+        return new Pair<>(1D, 2.45D);
     }
 
     @Override
     public Vec3 getInteriorPosition(ITardisLevel level) {
         Direction intDirection = DirectionHelper.getInteriorDirection(level).getOpposite();
-        Vec3 intOffset = new Vec3(0, 1.3, 0);
+        Vec3 intOffset = new Vec3(0, 1.35, 0);
         intOffset = intOffset.relative(intDirection, 0.4);
 
         return intOffset;
@@ -29,9 +29,9 @@ public class CapsuleType extends ChameleonType {
     @Override
     public Vec3 getExteriorPosition(ITardisLevel level) {
         Direction extDirection = DirectionHelper.getExteriorDirection(level);
-        Vec3 extOffset = new Vec3(0, 0.75, 0);
+        Vec3 extOffset = new Vec3(0, 0.85, 0);
 
-        extOffset = extOffset.relative(extDirection, 0.75);
+        extOffset = extOffset.relative(extDirection, 0.53);
 
         return extOffset;
     }

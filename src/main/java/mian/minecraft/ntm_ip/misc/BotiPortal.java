@@ -16,6 +16,7 @@ import java.util.UUID;
 public class BotiPortal extends Portal {
     private static final EntityDataAccessor<Optional<UUID>> TARDIS_ID = SynchedEntityData.defineId(BotiPortal.class, EntityDataSerializers.OPTIONAL_UUID);
     private boolean valid = false;
+    private boolean isInterior = false;
 
     public BotiPortal(EntityType<?> entityType, Level world) {
         super(entityType, world);
@@ -33,6 +34,14 @@ public class BotiPortal extends Portal {
 
     public void setTardisId(UUID uuid){
         this.entityData.set(TARDIS_ID, Optional.of(uuid));
+    }
+
+    public void setIsInterior(boolean isInterior){
+        this.isInterior = isInterior;
+    }
+
+    public boolean getIsInterior(){
+        return isInterior;
     }
 
     public void setValid(boolean valid){
@@ -73,6 +82,7 @@ public class BotiPortal extends Portal {
             compoundTag.putUUID("tardis_id", tardisId);
         }
         compoundTag.putBoolean("valid", getValid());
+        compoundTag.putBoolean("is_interior", getIsInterior());
     }
 
     @Override
@@ -82,5 +92,6 @@ public class BotiPortal extends Portal {
             setTardisId(compoundTag.getUUID("tardis_id"));
         }
         setValid(compoundTag.getBoolean("valid"));
+        setIsInterior(compoundTag.getBoolean("is_interior"));
     }
 }

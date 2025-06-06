@@ -54,8 +54,7 @@ public abstract class ExteriorTileMixin {
                                                    Operation<Void> original,
                                                    @Local(argsOnly = true) LocalRef<ExteriorTile> exteriorTileRef) {
         ITardisLevel tardis = exteriorTileRef.get().getTardis().orElse(null);
-        if (tardis == null || Portals.getPortalsForTardis(
-                UUID.fromString(tardis.getLevel().dimension().location().getPath())).isEmpty())
+        if (tardis == null || Portals.getPortalsForTardis(tardis).isEmpty())
             original.call(instance, level);
     }
 }

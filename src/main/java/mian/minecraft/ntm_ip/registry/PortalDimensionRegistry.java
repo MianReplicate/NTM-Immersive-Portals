@@ -32,8 +32,8 @@ public class PortalDimensionRegistry {
     public static final RegistryObject<PortalDimensionType> COFFIN =
             registerType(ExteriorRegistry.COFFIN, CoffinType::new);
 
-    public static final RegistryObject<PortalDimensionType> IMPALA =
-            registerType(ExteriorRegistry.IMPALA, ImpalaType::new);
+//    public static final RegistryObject<PortalDimensionType> IMPALA =
+//            registerType(ExteriorRegistry.IMPALA, ImpalaType::new);
 
     public static final RegistryObject<PortalDimensionType> OCTA =
             registerType(ExteriorRegistry.OCTA, OctaType::new);
