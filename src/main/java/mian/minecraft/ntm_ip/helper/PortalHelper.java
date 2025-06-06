@@ -1,6 +1,7 @@
 package mian.minecraft.ntm_ip.helper;
 
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -13,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class PortalHelper {
-    public static void removePortal(Level level, int portalID){
+    public static void removePortal(ServerLevel level, UUID portalID){
         Entity portal = level.getEntity(portalID);
         if(portal instanceof Portal portal1 && portal1 != null && portal1.isAlive())
             portal1.kill();
