@@ -8,6 +8,7 @@ import mian.minecraft.ntm_ip.NTMIP;
 import mian.minecraft.ntm_ip.api.Portalable;
 import mian.minecraft.ntm_ip.api.PublicDoorData;
 import mian.minecraft.ntm_ip.helper.PortalHelper;
+import mian.minecraft.ntm_ip.misc.Portals;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
@@ -51,96 +52,10 @@ public abstract class ExteriorTileMixin {
     private static void ntm_immersive_portals$tick(TeleportHandler<InteriorDoorTile> instance,
                                                    ServerLevel level,
                                                    Operation<Void> original,
-                                                   @Local(argsOnly = true) LocalRef<ExteriorTile> exteriorTileRef){
+                                                   @Local(argsOnly = true) LocalRef<ExteriorTile> exteriorTileRef) {
         ITardisLevel tardis = exteriorTileRef.get().getTardis().orElse(null);
-//        tardis.getLevel().getServer().
-//        tardis.getLevel().getServer().get.getSharedSpawnPos()
-        if(tardis == null)
+        if (tardis == null || Portals.getPortalsForTardis(
+                UUID.fromString(tardis.getLevel().dimension().location().getPath())).isEmpty())
             original.call(instance, level);
-//        } else {
-//            Portalable portalable = ((Portalable) exteriorTileRef.get());
-//            Portal portal = portalable.ntm_immersive_portals$getPortal();
-//            boolean shouldTeleport = exteriorTileRef.get().getDoorHandler().getDoorState().isOpen();
-//
-//            if (shouldTeleport) {
-//                Vec3 origin = exteriorTileRef.get().getBlockPos().getCenter();
-//                InteriorDoorData doorData = tardis.getInteriorManager().getMainInteriorDoor();
-//                if(tardis.getInteriorManager().getMainDoorID().isEmpty())
-//                    tardis.getInteriorManager().setMainDoor(((PublicDoorData) doorData).ntm_immersive_portals$getUUID());
-//                Vec3 dest = tardis.getInteriorManager().getMainInteriorDoor().getPosition(tardis.getLevel());
-//
-//                float y = WorldHelper.getHorizontalFacing(exteriorTileRef.get().getBlockState()).toYRot();
-//
-//                Direction intDir = Direction.fromYRot(tardis.getInteriorManager().getMainInteriorDoor().getRotation(tardis));
-//                dest = dest.relative(intDir, -2);
-//
-//                Direction extDir = WorldHelper.getHorizontalFacing(exteriorTileRef.get().getBlockState());
-//                origin = origin.relative(extDir, 0.75);
-//
-//                ResourceKey<Level> targetDim = tardis.getId();
-//                if(portal == null || !portal.isAlive()){
-//                    portal = PortalHelper.createPortal(
-//                            level,
-//                            origin,
-//                            dest, // maybe work??,
-//                            targetDim,
-//                            DQuaternion.rotationByDegrees(new Vec3(0, -1, 0), y),
-//                            1,
-//                            2
-//                    );
-//                    portalable.ntm_immersive_portals$setPortal(portal);
-//                    portal.setInteractable(false);
-//                    portal.animation.defaultAnimation.durationTicks = 0;
-//                    portal.setIsVisible(true);
-//                    portal.teleportable = true;
-//
-//                    McHelper.spawnServerEntity(portal);
-//
-//                    NTMIP.LOGGER.info("Created portal!");
-//                    NTMIP.LOGGER.info("Origin:"+ origin.toString());
-//                    NTMIP.LOGGER.info("Dest:"+ dest.toString());
-//                    NTMIP.LOGGER.info("Origin Dim:"+ level.toString());
-//                    NTMIP.LOGGER.info("Dest Dim:"+ targetDim.toString());
-//                }
-//
-//                if(!level.equals(portal.getOriginWorld())){
-//                    portalable.ntm_immersive_portals$removePortal();
-//                } else {
-//                    if(!origin.equals(portal.getOriginPos())
-//                            || !dest.equals(portal.getDestPos())
-//                            || !targetDim.equals(portal.getDestDim())){
-//                        NTMIP.LOGGER.info("Origin:"+ origin.toString());
-//                        NTMIP.LOGGER.info("Dest:"+ dest.toString());
-//                        NTMIP.LOGGER.info("Origin Dim:"+ level.toString());
-//                        NTMIP.LOGGER.info("Dest Dim:"+ targetDim.toString());
-//
-//                        portal.setOriginPos(origin);
-//                        portal.setPos(dest);
-//                        portal.setDestinationDimension(tardis.getLocation().getLevel());
-//                        portal.reloadAndSyncToClient();
-//                    }
-//                }
-//            } else {
-//                portalable.ntm_immersive_portals$removePortal();
-//            }
-//        }
     }
-//
-//    @Override
-//    public void ntm_immersive_portals$removePortal() {
-//        PortalHelper.removePortal(((BlockEntity)(Object) this).getLevel(), ntm_immersive_portals$portal);
-//        ntm_immersive_portals$portal = 0;
-//    }
-//
-//    @Override
-//    public void ntm_immersive_portals$setPortal(Portal start) {
-//        this.ntm_immersive_portals$portal = start.getId();
-//    }
-//    @Override
-//    public Portal ntm_immersive_portals$getPortal() {
-//        Entity portal = ((BlockEntity)(Object) this).getLevel().getEntity(ntm_immersive_portals$portal);
-//        if(portal != null)
-//            return (Portal) portal;
-//        return null;
-//    }
 }
