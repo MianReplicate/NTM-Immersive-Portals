@@ -1,6 +1,7 @@
 package mian.minecraft.ntm_ip;
 
 import com.mojang.logging.LogUtils;
+import mian.minecraft.ntm_ip.registry.ExteriorDimensionRegistry;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 //TODO: Current Bugs
 // Dim IDs arent always being synced over properly? Client isnt getting all the ids ?
 // Fix rotation and position of portals
-// Portals dont get removed always (maybe need to save ids)
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(NTMIP.MODID)
@@ -24,7 +24,6 @@ public class NTMIP {
     public NTMIP() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // Register ourselves for server and other game events we are interested in
-        MinecraftForge.EVENT_BUS.register(this);
+        ExteriorDimensionRegistry.register(modEventBus);
     }
 }
