@@ -84,7 +84,11 @@ public abstract class InteriorManagerMixin implements Portalable {
 
                 if (shouldTeleport && dimensionType.isPresent() && !tardis.isInVortex() && !tardis.isTakingOffOrLanding() && foundValidDoor) {
                     UUID tardisID = ntm_immersive_portals$getTardisID();
-                    ntm_immersive_portals$createOrEditExterior(tardis, exteriorTile, dimensionType.get(), tardisID);
+
+                    BotiPortal exterior = ntm_immersive_portals$createOrEditExterior(tardis, exteriorTile, dimensionType.get(), tardisID);
+                    BotiPortal interior = ntm_immersive_portals$createOrEditInterior(tardis, exteriorTile, dimensionType.get(), tardisID);
+
+                    PortalHelper.adjustPortalsToConnectAndSync(exterior, interior);
                 } else {
                     ntm_immersive_portals$removePortals();
                 }
@@ -106,16 +110,32 @@ public abstract class InteriorManagerMixin implements Portalable {
         }
 
         // interior needed
-        BotiPortal interior = ntm_immersive_portals$createOrEditInterior(tardis, exteriorTile, dimensionType, tardisID);
         ResourceKey<Level> targetDim = tardis.getId();
+
+        InteriorDoorData door = tardis.getInteriorManager().getMainInteriorDoor();
+        Vec3 origin = tardis.getLocation().getPos().getCenter();
+        Vec3 dest = door.getPosition(level);
+
+        Vec3 extOffset = dimensionType.getExteriorPosition(tardis);
+        Vec3 intOffset = dimensionType.getInteriorPosition(tardis);
+        origin = origin.add(extOffset);
+        dest = dest.add(intOffset);
+        dest = dest.add(dimensionType.getDestinationToInterior(tardis));
 
         if(exterior == null){
             Pair<Double, Double> sizes = dimensionType.getExteriorSize(tardis);
 //            Pair<Double, Double> rotations = dimensionType.getExteriorAxis(tardis);
 
-            exterior = PortalManipulation.createReversePortal(
-                    interior,
-                    EntityTypeRegistry.BOTI_PORTAL.get()
+            float y = WorldHelper.getHorizontalFacing(exteriorTile.getBlockState()).toYRot();
+
+            exterior = PortalHelper.createPortal(
+                    level,
+                    origin,
+                    dest, // maybe work??,
+                    targetDim,
+                    DQuaternion.rotationByDegrees(new Vec3(0, -1, 0), y),
+                    sizes.getA(),
+                    sizes.getB()
             );
 
 //            Pair<Double, Double> interiorRotations = dimensionType.getInteriorToExteriorAxis(tardis);
@@ -127,10 +147,6 @@ public abstract class InteriorManagerMixin implements Portalable {
 //            exterior.setOrientation(
 //                            DQuaternion.rotationByDegrees(exterior.axisW, rotations.getA()).getAxisW(),
 //                            DQuaternion.rotationByDegrees(exterior.axisH, rotations.getB()).getAxisH());
-
-            exterior.setOrientationAndSize(exterior.axisW, exterior.axisH, sizes.getA(), sizes.getB());
-            exterior.setOriginPos(interior.getDestPos().subtract(dimensionType.getDestinationToExterior(tardis)));
-            exterior.setDestination(exterior.getDestPos().add(dimensionType.getDestinationToInterior(tardis)));
 
 //            rotations = dimensionType.getExteriorToInteriorAxis(tardis);
 //
@@ -159,16 +175,17 @@ public abstract class InteriorManagerMixin implements Portalable {
             NTMIP.LOGGER.info("Dest Dim:"+ targetDim.toString());
         }
 
-        Vec3 origin = interior.getDestPos().subtract(dimensionType.getDestinationToExterior(tardis));
-        Vec3 des = exterior.getDestPos().add(dimensionType.getDestinationToInterior(tardis));
-
-        if(!interior.getOriginDim().equals(exterior.getDestDim())
-                || !exterior.getDestPos().equals(des)
-        || !exterior.getOriginPos().equals(origin)){
+        if(!origin.equals(exterior.getOriginPos())
+                || !dest.equals(exterior.getDestPos())
+                || !targetDim.equals(exterior.getDestDim())){
+            NTMIP.LOGGER.info("Origin:"+ origin.toString());
+            NTMIP.LOGGER.info("Dest:"+ dest.toString());
+            NTMIP.LOGGER.info("Origin Dim:"+ level.toString());
+            NTMIP.LOGGER.info("Dest Dim:"+ targetDim.toString());
 
             exterior.setOriginPos(origin);
-            exterior.setDestination(des);
-            exterior.setDestinationDimension(interior.getOriginDim());
+            exterior.setDestination(dest);
+            exterior.setDestinationDimension(tardis.getLocation().getLevel());
             exterior.reloadAndSyncToClient();
         }
         return exterior;
@@ -217,7 +234,7 @@ public abstract class InteriorManagerMixin implements Portalable {
 //                    DQuaternion.rotationByDegrees(interior.axisW, rotations.getA()).getAxisW(),
 //                    DQuaternion.rotationByDegrees(interior.axisH, rotations.getB()).getAxisH());
 
-            PortalHelper.realignRotationToExterior(exteriorTile, interior);
+//            PortalHelper.realignRotationToExterior(exteriorTile, interior);
 
 //            rotations = dimensionType.getInteriorToExteriorAxis(tardis);
 //

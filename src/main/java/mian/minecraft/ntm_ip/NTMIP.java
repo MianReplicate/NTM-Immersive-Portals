@@ -18,8 +18,6 @@ import org.slf4j.Logger;
 //TODO: Current Bugs
 // Dim IDs arent always being synced over properly? Client isnt getting all the ids ?
 // portal keeps recreating itself for some reason
-// Rotations are weird
-// set doors properly for each rotation
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(NTMIP.MODID)
