@@ -2,6 +2,7 @@ package mian.minecraft.ntm_ip.registry;
 
 import mian.minecraft.ntm_ip.NTMIP;
 import mian.minecraft.ntm_ip.helper.Constants;
+import mian.minecraft.ntm_ip.helper.Helper;
 import mian.minecraft.ntm_ip.registry.portal_types.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.*;
@@ -15,7 +16,7 @@ import java.util.function.Supplier;
 
 public class PortalDimensionRegistry {
     public static final DeferredRegister<PortalDimensionType>
-            DIMENSION_TYPES = DeferredRegister.create(Constants.PORTAL_REGISTRY, NTMIP.MODID);
+            DIMENSION_TYPES = DeferredRegister.create(Helper.createRL(Constants.PORTAL_REGISTRY), NTMIP.MODID);
 
     public static final Supplier<IForgeRegistry<PortalDimensionType>> REGISTRY =
             DIMENSION_TYPES.makeRegistry(RegistryBuilder::new);

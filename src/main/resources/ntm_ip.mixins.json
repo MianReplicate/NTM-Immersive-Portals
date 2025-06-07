@@ -6,10 +6,12 @@
   "refmap": "ntm_ip.refmap.json",
   "mixins": [
     "DimensionHelperMixin",
+    "ExteriorDataHandlerMixin",
     "ExteriorTileMixin",
     "InteriorDoorDataMixin",
     "InteriorDoorTileMixin",
-    "InteriorManagerMixin"
+    "InteriorManagerMixin",
+    "MiscNetworkingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

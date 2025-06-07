@@ -2,8 +2,7 @@ package mian.minecraft.ntm_ip.helper;
 
 import mian.minecraft.ntm_ip.NTMIP;
 import mian.minecraft.ntm_ip.misc.BotiPortal;
-import mian.minecraft.ntm_ip.registry.EntityTypeRegistry;
-import net.minecraft.core.BlockPos;
+import mian.minecraft.ntm_ip.registry.IPEntityTypeRegistry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -11,12 +10,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.blockentities.exteriors.ExteriorTile;
 import net.tardis.mod.helpers.WorldHelper;
-import qouteall.imm_ptl.core.platform_specific.IPRegistry;
 import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.q_misc_util.my_util.DQuaternion;
 
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class PortalHelper {
@@ -47,7 +44,7 @@ public class PortalHelper {
                                           double width,
                                           double height
     ) {
-        BotiPortal portal = EntityTypeRegistry.BOTI_PORTAL.get().create(level);
+        BotiPortal portal = IPEntityTypeRegistry.BOTI_PORTAL.get().create(level);
 
         portal.setOriginPos(origin);
         portal.setDestinationDimension(destinationLvl);

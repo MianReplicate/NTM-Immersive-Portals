@@ -21,8 +21,6 @@ public class ForgeEvents {
         if(to != null){
             to.getCapability(Capabilities.TARDIS).ifPresent(tardis -> {
                 if(Portals.getPortalsForTardis(tardis).stream().anyMatch(portal -> !portal.getIsInterior())){
-                    MinecraftForge.EVENT_BUS.post(new TardisEvent.EnterEvent.Post(tardis, event.getEntity()));
-
                     // since pre isn't called for portals
                     Helper.teleportFollowers(tardis, event.getEntity(), from, tardis.getLocation().getPos());
                 }

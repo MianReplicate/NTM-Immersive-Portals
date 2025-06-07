@@ -1,11 +1,11 @@
 package mian.minecraft.ntm_ip.mixin;
 
 import mian.minecraft.ntm_ip.NTMIP;
+import mian.minecraft.ntm_ip.api.ExteriorDataHandlerImpl;
 import mian.minecraft.ntm_ip.api.Portalable;
 import mian.minecraft.ntm_ip.helper.PortalHelper;
 import mian.minecraft.ntm_ip.misc.BotiPortal;
 import mian.minecraft.ntm_ip.misc.Portals;
-import mian.minecraft.ntm_ip.registry.EntityTypeRegistry;
 import mian.minecraft.ntm_ip.registry.PortalDimensionRegistry;
 import mian.minecraft.ntm_ip.registry.PortalDimensionType;
 import net.minecraft.core.BlockPos;
@@ -14,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemStackHandler;
 import net.tardis.mod.blockentities.exteriors.ExteriorTile;
 import net.tardis.mod.cap.level.ITardisLevel;
 import net.tardis.mod.helpers.WorldHelper;
@@ -34,7 +33,6 @@ import oshi.util.tuples.Pair;
 import qouteall.imm_ptl.core.McHelper;
 import qouteall.imm_ptl.core.portal.Portal;
 import qouteall.imm_ptl.core.portal.PortalExtension;
-import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.q_misc_util.my_util.DQuaternion;
 
 import java.util.HashMap;
@@ -85,7 +83,9 @@ public abstract class InteriorManagerMixin implements Portalable {
         if (shouldTeleport &&
                 dimensionType.isPresent() &&
                 !tardis.isInVortex() &&
-                !tardis.isTakingOffOrLanding() && foundValidDoor) {
+                !tardis.isTakingOffOrLanding() &&
+                foundValidDoor &&
+                ((ExteriorDataHandlerImpl)tardis.getExteriorExtraData()).ntm_immersive_portals$isBOTIEnabled()) {
             List<BotiPortal> portals = Portals.getPortalsForTardis(ntm_immersive_portals$getTardisID());
             for(int i = 0; i < portals.size(); i++){
                 Portal portal = portals.get(i);
