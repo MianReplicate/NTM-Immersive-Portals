@@ -35,6 +35,7 @@ import qouteall.imm_ptl.core.portal.PortalExtension;
 import qouteall.imm_ptl.core.portal.PortalManipulation;
 import qouteall.q_misc_util.my_util.DQuaternion;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,6 +45,13 @@ public abstract class InteriorManagerMixin implements Portalable {
     @Shadow @Final private ITardisLevel tardis;
 
     @Shadow public abstract DoorHandler getDoorHandler();
+
+    @Shadow private HashMap<UUID, InteriorDoorData> interiorDoorPositions;
+
+    @Shadow public abstract void tick();
+
+    @Unique
+    private int tickCount = 0;
 
     @Unique
     public UUID ntm_immersive_portals$getTardisID(){
@@ -59,19 +67,31 @@ public abstract class InteriorManagerMixin implements Portalable {
     @Inject(method = "tick", at = @At(value = "TAIL"))
     public void ntm_immersive_portals$tick(CallbackInfo ci){
         if(!tardis.isClient()){
+//            tickCount++;
             BlockEntity entity = ((ServerLevel)tardis.getLevel()).getServer().getLevel(tardis.getLocation().getLevel()).getBlockEntity(tardis.getLocation().getPos());
 
             if(entity instanceof ExteriorTile exteriorTile){
                 boolean shouldTeleport = getDoorHandler().getDoorState().isOpen();
                 Optional<PortalDimensionType> dimensionType = PortalDimensionRegistry.getDimensionTypeFromTardis(tardis);
 
-                if (shouldTeleport && dimensionType.isPresent()) {
+                boolean foundValidDoor = false;
+                for(InteriorDoorData data : interiorDoorPositions.values()) {
+                    if (data != null && data.isValidDoor(this.tardis)) {
+                        foundValidDoor = true;
+                        break;
+                    }
+                }
+
+                if (shouldTeleport && dimensionType.isPresent() && !tardis.isInVortex() && !tardis.isTakingOffOrLanding() && foundValidDoor) {
                     UUID tardisID = ntm_immersive_portals$getTardisID();
                     ntm_immersive_portals$createOrEditExterior(tardis, exteriorTile, dimensionType.get(), tardisID);
                 } else {
                     ntm_immersive_portals$removePortals();
                 }
             }
+
+//            if(tickCount >= 500)
+//                tickCount = 500; // keep at this tick
         }
     }
 
@@ -91,14 +111,14 @@ public abstract class InteriorManagerMixin implements Portalable {
 
         if(exterior == null){
             Pair<Double, Double> sizes = dimensionType.getExteriorSize(tardis);
-            Pair<Double, Double> rotations = dimensionType.getExteriorAxis(tardis);
+//            Pair<Double, Double> rotations = dimensionType.getExteriorAxis(tardis);
 
             exterior = PortalManipulation.createReversePortal(
                     interior,
                     EntityTypeRegistry.BOTI_PORTAL.get()
             );
 
-            Pair<Double, Double> interiorRotations = dimensionType.getInteriorToExteriorAxis(tardis);
+//            Pair<Double, Double> interiorRotations = dimensionType.getInteriorToExteriorAxis(tardis);
 //            exterior.setOrientation(
 //                    DQuaternion.rotationByDegrees(exterior.axisW, -interiorRotations.getA()).getAxisW(),
 //                    DQuaternion.rotationByDegrees(exterior.axisH, -interiorRotations.getB()).getAxisH());
@@ -112,10 +132,10 @@ public abstract class InteriorManagerMixin implements Portalable {
             exterior.setOriginPos(interior.getDestPos().subtract(dimensionType.getDestinationToExterior(tardis)));
             exterior.setDestination(exterior.getDestPos().add(dimensionType.getDestinationToInterior(tardis)));
 
-            rotations = dimensionType.getExteriorToInteriorAxis(tardis);
-
-            Vec3 axisW = exterior.getRotation().getAxisW();
-            Vec3 axisH = exterior.getRotation().getAxisH();
+//            rotations = dimensionType.getExteriorToInteriorAxis(tardis);
+//
+//            Vec3 axisW = exterior.getRotation().getAxisW();
+//            Vec3 axisH = exterior.getRotation().getAxisH();
 
 //            exterior.setRotation(DQuaternion.fromFacingVecs(
 //                    DQuaternion.rotationByDegrees(axisW, rotations.getA()).getAxisW(),
@@ -163,9 +183,6 @@ public abstract class InteriorManagerMixin implements Portalable {
         Vec3 origin = door.getPosition(level);
         Vec3 dest = tardis.getLocation().getPos().getCenter();
 
-        float y = WorldHelper.getHorizontalFacing(level.getBlockState(BlockPos.containing(door.getPosition(level))))
-                .toYRot();
-
         Vec3 extOffset = dimensionType.getExteriorPosition(tardis);
         Vec3 intOffset = dimensionType.getInteriorPosition(tardis);
         origin = origin.add(intOffset);
@@ -180,7 +197,10 @@ public abstract class InteriorManagerMixin implements Portalable {
         ResourceKey<Level> targetDim = tardis.getLocation().getLevel();
         if(interior == null){
             Pair<Double, Double> sizes = dimensionType.getInteriorSize(tardis);
-            Pair<Double, Double> rotations = dimensionType.getInteriorAxis(tardis);
+//            Pair<Double, Double> rotations = dimensionType.getInteriorAxis(tardis);
+
+            float y = WorldHelper.getHorizontalFacing(level.getBlockState(BlockPos.containing(door.getPosition(level))))
+                    .toYRot();
 
             interior = PortalHelper.createPortal(
                     level,
@@ -193,18 +213,16 @@ public abstract class InteriorManagerMixin implements Portalable {
             );
             interior.setValid(true);
 
-            interior.setOrientation(
-                    DQuaternion.rotationByDegrees(interior.axisW, rotations.getA()).getAxisW(),
-                    DQuaternion.rotationByDegrees(interior.axisH, rotations.getB()).getAxisH());
+//            interior.setOrientation(
+//                    DQuaternion.rotationByDegrees(interior.axisW, rotations.getA()).getAxisW(),
+//                    DQuaternion.rotationByDegrees(interior.axisH, rotations.getB()).getAxisH());
 
-            DQuaternion flip = DQuaternion.rotationByDegrees(interior.axisH,
-                    -WorldHelper.getDegreeFromRotation(WorldHelper.getHorizontalFacing(exteriorTile.getBlockState())));
-            interior.setRotation(flip);
+            PortalHelper.realignRotationToExterior(exteriorTile, interior);
 
-            rotations = dimensionType.getInteriorToExteriorAxis(tardis);
-
-            Vec3 axisW = interior.getRotation().getAxisW();
-            Vec3 axisH = interior.getRotation().getAxisH();
+//            rotations = dimensionType.getInteriorToExteriorAxis(tardis);
+//
+//            Vec3 axisW = interior.getRotation().getAxisW();
+//            Vec3 axisH = interior.getRotation().getAxisH();
 
 //            interior.setRotation(DQuaternion.fromFacingVecs(
 //                    DQuaternion.rotationByDegrees(axisW, rotations.getA()).getAxisW(),

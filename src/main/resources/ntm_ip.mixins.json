@@ -11,8 +11,6 @@
     "InteriorDoorTileMixin",
     "InteriorManagerMixin"
   ],
-  "client": [
-  ],
   "injectors": {
     "defaultRequire": 1
   }

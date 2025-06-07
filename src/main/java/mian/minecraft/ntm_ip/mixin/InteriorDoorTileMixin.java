@@ -34,7 +34,10 @@ public class InteriorDoorTileMixin {
         BlockEntity entity = tardisLevel.getServer().getLevel(tardis.getLocation().getLevel()).getBlockEntity(tardis.getLocation().getPos());
 
         // only main interior door get portals (the reason being it's too laggy to do all of them)
-        if (!(entity instanceof ExteriorTile) || Portals.getPortalsForTardis(tardis).isEmpty() || tardis == null || (tardis != null && (
+        if (!(entity instanceof ExteriorTile)
+                || Portals.getPortalsForTardis(tardis).isEmpty()
+                || tardis == null
+                || (tardis != null && (
                 !tardis.getInteriorManager().getMainInteriorDoor().getPosition(tardisLevel)
                         .equals(WorldHelper.centerOfBlockPos(door.get().getBlockPos(), false))))) {
             original.call(instance, tardisLevel);
