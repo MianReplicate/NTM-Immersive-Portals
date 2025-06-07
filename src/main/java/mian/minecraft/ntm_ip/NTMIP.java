@@ -17,7 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
 //TODO: Current Bugs
-// for some reason the car exterior jsut breaks removing the portal idk :sob:
+// for some reason the car exterior jsut doesnt allow the exterior portal to be removed idk :sob:
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(NTMIP.MODID)
