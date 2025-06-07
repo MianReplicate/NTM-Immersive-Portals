@@ -17,7 +17,9 @@ import org.slf4j.Logger;
 
 //TODO: Current Bugs
 // Dim IDs arent always being synced over properly? Client isnt getting all the ids ?
-// portal keeps recreating itself for some reason
+// Make pets follow through TARDIS
+// Ability to toggle BOTI
+// Remove portals for unsupported exteriors? (Portals arent removing properly)
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(NTMIP.MODID)

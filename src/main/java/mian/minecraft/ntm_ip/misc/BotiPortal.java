@@ -1,5 +1,6 @@
 package mian.minecraft.ntm_ip.misc;
 
+import mian.minecraft.ntm_ip.NTMIP;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -14,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class BotiPortal extends Portal {
-    private static final EntityDataAccessor<Optional<UUID>> TARDIS_ID = SynchedEntityData.defineId(BotiPortal.class, EntityDataSerializers.OPTIONAL_UUID);
+    private UUID tardis = null;
     private boolean valid = false;
     private boolean isInterior = false;
 
@@ -22,18 +23,12 @@ public class BotiPortal extends Portal {
         super(entityType, world);
     }
 
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.getEntityData().define(TARDIS_ID, Optional.of(UUID.randomUUID()));
-    }
-
     public UUID getTardisId(){
-        return this.entityData.get(TARDIS_ID).get();
+        return tardis;
     }
 
     public void setTardisId(UUID uuid){
-        this.entityData.set(TARDIS_ID, Optional.of(uuid));
+        tardis = uuid;
     }
 
     public void setIsInterior(boolean isInterior){
@@ -63,12 +58,15 @@ public class BotiPortal extends Portal {
 
         if (level() instanceof ServerLevel) {
             List<BotiPortal> portalList = Portals.getPortalsForTardis(tardisId);
+//            NTMIP.LOGGER.info(String.valueOf(portalList.size()));
             if(portalList.stream().filter(portal -> portal.getUUID() == this.getUUID()).findAny().isEmpty()
             && !this.level().isClientSide)
                 return false;
 
-            if(!getValid())
+            if(!getValid()) {
+                portalList.remove(this);
                 return false;
+            }
         }
 
         return super.isPortalValid();

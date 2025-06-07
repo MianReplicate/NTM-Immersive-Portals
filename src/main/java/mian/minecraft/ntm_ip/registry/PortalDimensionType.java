@@ -3,6 +3,7 @@ package mian.minecraft.ntm_ip.registry;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.cap.level.ITardisLevel;
 import oshi.util.tuples.Pair;
+import qouteall.imm_ptl.core.portal.GeometryPortalShape;
 
 public abstract class PortalDimensionType {
     // Interior offset size
@@ -34,4 +35,7 @@ public abstract class PortalDimensionType {
 
     // Interior to exterior offset destination (usually not needed unless working with mixed door & exterior types)
     public abstract Vec3 getDestinationToExterior(ITardisLevel level);
+
+    // weird ass portal shape :skull:
+    public abstract GeometryPortalShape getPortalShape(ITardisLevel level);
 }

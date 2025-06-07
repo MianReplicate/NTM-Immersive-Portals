@@ -1,5 +1,6 @@
 package mian.minecraft.ntm_ip.misc;
 
+import mian.minecraft.ntm_ip.NTMIP;
 import net.tardis.mod.cap.level.ITardisLevel;
 import qouteall.imm_ptl.core.portal.Portal;
 

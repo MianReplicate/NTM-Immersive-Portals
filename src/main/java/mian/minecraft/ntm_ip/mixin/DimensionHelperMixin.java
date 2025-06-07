@@ -2,7 +2,6 @@ package mian.minecraft.ntm_ip.mixin;
 
 import io.netty.buffer.Unpooled;
 import mian.minecraft.ntm_ip.NTMIP;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
@@ -20,7 +19,6 @@ import net.tardis.mod.network.packets.SyncDimensionListMessage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import qouteall.q_misc_util.MiscHelper;
 import qouteall.q_misc_util.MiscNetworking;
@@ -28,10 +26,8 @@ import qouteall.q_misc_util.api.DimensionAPI;
 import qouteall.q_misc_util.dimension.DimensionIdManagement;
 import qouteall.q_misc_util.dimension.DimensionIdRecord;
 import qouteall.q_misc_util.dimension.DimensionTypeSync;
-import qouteall.q_misc_util.ducks.IEMinecraftServer_Misc;
 import qouteall.q_misc_util.forge.events.ServerDimensionDynamicUpdateEvent;
 
-import java.util.Map;
 import java.util.function.BiFunction;
 
 @Mixin(DimensionHelper.class)

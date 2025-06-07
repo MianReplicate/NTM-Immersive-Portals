@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.cap.level.ITardisLevel;
 import oshi.util.tuples.Pair;
+import qouteall.imm_ptl.core.portal.GeometryPortalShape;
 
 public class CoffinType extends DefaultType {
     @Override
@@ -34,5 +35,15 @@ public class CoffinType extends DefaultType {
         extOffset = extOffset.relative(extDirection, 0.75);
 
         return extOffset;
+    }
+
+    @Override
+    public GeometryPortalShape getPortalShape(ITardisLevel level) {
+        GeometryPortalShape shape = new GeometryPortalShape();
+//        shape.addTriangleForRectangle(1, 1, 3, 3);
+        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(1, 2, 1, 1, -1, -1));
+//        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(3, 1, 4, 2, 3, 5));
+
+        return shape;
     }
 }
