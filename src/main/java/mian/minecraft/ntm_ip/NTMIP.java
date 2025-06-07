@@ -18,6 +18,10 @@ import org.slf4j.Logger;
 
 //TODO: Current Bugs
 // for some reason the car exterior jsut doesnt allow the exterior portal to be removed idk :sob:
+// maybe make portal visible during flight and have it go to vortex?
+// implement rotations perhaps
+// implement support for car exterior?
+// make first go into tardis audio nto happen constantly
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(NTMIP.MODID)
@@ -40,9 +44,9 @@ public class NTMIP {
         PortalDimensionRegistry.register(modEventBus);
     }
 
-    @OnlyIn(value= Dist.CLIENT)
+    @OnlyIn(value = Dist.CLIENT)
     @SubscribeEvent
-    public void clientRenderers(EntityRenderersEvent.RegisterRenderers event){
+    public void clientRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(IPEntityTypeRegistry.BOTI_PORTAL.get(), BotiPortalRenderer::new);
     }
 }

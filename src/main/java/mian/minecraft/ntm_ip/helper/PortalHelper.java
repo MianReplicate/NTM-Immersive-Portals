@@ -17,13 +17,13 @@ import qouteall.q_misc_util.my_util.DQuaternion;
 import java.util.UUID;
 
 public class PortalHelper {
-    public static void removePortal(ServerLevel level, UUID portalID){
+    public static void removePortal(ServerLevel level, UUID portalID) {
         Entity portal = level.getEntity(portalID);
-        if(portal instanceof Portal portal1 && portal1 != null && portal1.isAlive())
+        if (portal instanceof Portal portal1 && portal1 != null && portal1.isAlive())
             portal1.kill();
     }
 
-    public static void realignRotationToExterior(ExteriorTile exteriorTile, Portal interior){
+    public static void realignRotationToExterior(ExteriorTile exteriorTile, Portal interior) {
         DQuaternion otherSide = DQuaternion.fromFacingVecs(new Vec3(1, 0, 0), new Vec3(0, 1, 0));
 
         float angle = (-WorldHelper.getDegreeFromRotation(WorldHelper.getHorizontalFacing(exteriorTile.getBlockState()))
@@ -60,16 +60,16 @@ public class PortalHelper {
         return portal;
     }
 
-    public static void adjustPortalsToConnectAndSync(Portal a, Portal b){
+    public static void adjustPortalsToConnectAndSync(Portal a, Portal b) {
         DQuaternion aRotation = a.getRotation();
         DQuaternion bRotation = b.getRotation();
 
         PortalManipulation.adjustRotationToConnect(a, b);
 
-        if(aRotation == null || !aRotation.equals(a.getRotation()))
+        if (aRotation == null || !aRotation.equals(a.getRotation()))
             a.reloadAndSyncToClient();
 
-        if(bRotation == null || !bRotation.equals(b.getRotation()))
+        if (bRotation == null || !bRotation.equals(b.getRotation()))
             b.reloadAndSyncToClient();
     }
 }

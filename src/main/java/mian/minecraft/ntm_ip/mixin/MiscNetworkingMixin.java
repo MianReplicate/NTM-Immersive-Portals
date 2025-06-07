@@ -1,9 +1,5 @@
 package mian.minecraft.ntm_ip.mixin;
 
-import com.google.common.collect.HashBiMap;
-import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import mian.minecraft.ntm_ip.NTMIP;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -14,14 +10,9 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import qouteall.q_misc_util.Helper;
 import qouteall.q_misc_util.MiscHelper;
 import qouteall.q_misc_util.MiscNetworking;
-import qouteall.q_misc_util.dimension.DimId;
 import qouteall.q_misc_util.dimension.DimensionIdRecord;
 import qouteall.q_misc_util.dimension.DimensionTypeSync;
 import qouteall.q_misc_util.forge.events.ClientDimensionUpdateEvent;
@@ -37,7 +28,7 @@ public class MiscNetworkingMixin {
      */
     @OnlyIn(Dist.CLIENT)
     @Overwrite()
-    private static void processDimSync(FriendlyByteBuf buf, ClientGamePacketListener packetListener){
+    private static void processDimSync(FriendlyByteBuf buf, ClientGamePacketListener packetListener) {
         CompoundTag idMap = buf.readNbt();
         DimensionIdRecord.clientRecord = DimensionIdRecord.tagToRecord(idMap);
         CompoundTag typeMap = buf.readNbt();
@@ -47,7 +38,7 @@ public class MiscNetworkingMixin {
             Helper.log("Received Dimension Int Id Sync");
             Helper.log("\n" + DimensionIdRecord.clientRecord);
             Set<ResourceKey<Level>> dimIdSet = DimensionIdRecord.clientRecord.getDimIdSet();
-            ((IEClientPacketListener_Misc)packetListener).ip_setLevels(dimIdSet);
+            ((IEClientPacketListener_Misc) packetListener).ip_setLevels(dimIdSet);
             MinecraftForge.EVENT_BUS.post(new ClientDimensionUpdateEvent(dimIdSet));
         });
     }

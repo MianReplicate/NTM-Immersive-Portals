@@ -1,7 +1,6 @@
 package mian.minecraft.ntm_ip.registry.portal_types;
 
 import mian.minecraft.ntm_ip.helper.DirectionHelper;
-import mian.minecraft.ntm_ip.registry.PortalDimensionType;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.cap.level.ITardisLevel;

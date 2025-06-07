@@ -17,7 +17,7 @@ public class IPEntityTypeRegistry {
     public static final RegistryObject<EntityType<BotiPortal>> BOTI_PORTAL = ENTITY_TYPES.register("boti_portal", () ->
             EntityType.Builder.of(BotiPortal::new, MobCategory.MISC).build(Helper.createRL("boti_portal").toString()));
 
-    public static void register(IEventBus eventBus){
+    public static void register(IEventBus eventBus) {
         NTMIP.LOGGER.info("Registering entity types");
 
         ENTITY_TYPES.register(eventBus);

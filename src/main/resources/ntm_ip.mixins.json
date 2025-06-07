@@ -5,10 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "ntm_ip.refmap.json",
   "mixins": [
+    "CarTrunkEntityPartMixin",
     "DimensionHelperMixin",
+    "EntityExteriorMixin",
     "ExteriorDataHandlerMixin",
     "ExteriorTileMixin",
-    "InteriorDoorDataMixin",
     "InteriorDoorTileMixin",
     "InteriorManagerMixin",
     "MiscNetworkingMixin"

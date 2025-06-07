@@ -17,25 +17,21 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
-import java.util.UUID;
-
 @Mixin(InteriorDoorTile.class)
 public class InteriorDoorTileMixin {
     @Unique
     private int ntm_immersive_portals$portal;
 
-    @WrapOperation(remap=false, method = "lambda$tick$5", at = @At(target = "Lnet/tardis/mod/misc/TeleportHandler;tick(Lnet/minecraft/server/level/ServerLevel;)V", value = "INVOKE"))
+    @WrapOperation(remap = false, method = "lambda$tick$5", at = @At(target = "Lnet/tardis/mod/misc/TeleportHandler;tick(Lnet/minecraft/server/level/ServerLevel;)V", value = "INVOKE"))
     private static void ntm_immersive_portals$tick(TeleportHandler<InteriorDoorTile> instance,
                                                    ServerLevel tardisLevel,
                                                    Operation<Void> original,
                                                    @Local(argsOnly = true) LocalRef<InteriorDoorTile> door) {
 
         ITardisLevel tardis = tardisLevel.getCapability(Capabilities.TARDIS).orElse(null);
-        BlockEntity entity = tardisLevel.getServer().getLevel(tardis.getLocation().getLevel()).getBlockEntity(tardis.getLocation().getPos());
 
         // only main interior door get portals (the reason being it's too laggy to do all of them)
-        if (!(entity instanceof ExteriorTile)
-                || Portals.getPortalsForTardis(tardis).isEmpty()
+        if (Portals.getPortalsForTardis(tardis).isEmpty()
                 || tardis == null
                 || (tardis != null && (
                 !tardis.getInteriorManager().getMainInteriorDoor().getPosition(tardisLevel)

@@ -1,17 +1,10 @@
 package mian.minecraft.ntm_ip.registry.portal_types;
 
-import mian.minecraft.ntm_ip.helper.DirectionHelper;
 import mian.minecraft.ntm_ip.registry.PortalDimensionType;
-import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.cap.level.ITardisLevel;
 import oshi.util.tuples.Pair;
 import qouteall.imm_ptl.core.portal.GeometryPortalShape;
-import qouteall.imm_ptl.core.portal.PortalManipulation;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class DefaultType extends PortalDimensionType {
     @Override
@@ -65,7 +58,7 @@ public class DefaultType extends PortalDimensionType {
     }
 
     @Override
-    public GeometryPortalShape getPortalShape(ITardisLevel level){
+    public GeometryPortalShape getPortalShape(ITardisLevel level) {
         return new GeometryPortalShape();
     }
 }

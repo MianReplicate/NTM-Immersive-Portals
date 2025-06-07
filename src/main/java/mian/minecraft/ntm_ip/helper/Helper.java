@@ -31,11 +31,11 @@ import qouteall.q_misc_util.dimension.DimensionTypeSync;
 import qouteall.q_misc_util.forge.events.ServerDimensionDynamicUpdateEvent;
 
 public class Helper {
-    public static ResourceLocation createRL(String path){
+    public static ResourceLocation createRL(String path) {
         return ResourceLocation.fromNamespaceAndPath(NTMIP.MODID, path);
     }
 
-    public static void updateKnownDimensions(MinecraftServer server, ResourceKey<Level> worldKey){
+    public static void updateKnownDimensions(MinecraftServer server, ResourceKey<Level> worldKey) {
         DimensionIdManagement.updateAndSaveServerDimIdRecord();
         DimensionAPI.saveDimensionConfiguration(worldKey);
 
@@ -54,16 +54,16 @@ public class Helper {
         MinecraftForge.EVENT_BUS.post(new ServerDimensionDynamicUpdateEvent(server.levelKeys()));
     }
 
-    public static void teleportFollowers(ITardisLevel tardis, Player player, Level from, BlockPos previousPos){
+    public static void teleportFollowers(ITardisLevel tardis, Player player, Level from, BlockPos previousPos) {
         if (!tardis.isClient()) {
-            for(Entity entity : from
+            for (Entity entity : from
                     .getEntitiesOfClass(Entity.class, WorldHelper.getCenteredAABB(previousPos, 16.0F))) {
                 if (entity instanceof OwnableEntity pet) {
                     if (player.getUUID().equals(pet.getOwnerUUID())) {
                         boolean var10000;
-                        label26: {
-                            if (entity instanceof TamableAnimal) {
-                                TamableAnimal animal = (TamableAnimal)entity;
+                        label26:
+                        {
+                            if (entity instanceof TamableAnimal animal) {
                                 if (animal.isInSittingPose()) {
                                     var10000 = true;
                                     break label26;

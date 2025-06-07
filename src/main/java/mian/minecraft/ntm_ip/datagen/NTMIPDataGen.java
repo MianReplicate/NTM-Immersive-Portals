@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 public class NTMIPDataGen {
 
     @SubscribeEvent
-    public static void registerDataGen(GatherDataEvent event){
+    public static void registerDataGen(GatherDataEvent event) {
         event.getGenerator().addProvider(event.includeClient(), new NTMIPLangProvider(event.getGenerator()));
     }
 }
