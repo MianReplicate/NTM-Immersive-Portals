@@ -200,6 +200,7 @@ public abstract class InteriorManagerMixin implements Portalable {
             exterior.setDestinationDimension(targetDim);
             exterior.setWidth(width);
             exterior.setHeight(height);
+            exterior.specialShape = dimensionType.getPortalShape(tardis);
             exterior.reloadAndSyncToClient();
         }
         return exterior;
@@ -294,6 +295,7 @@ public abstract class InteriorManagerMixin implements Portalable {
             interior.setDestinationDimension(tardis.getLocation().getLevel());
             interior.setWidth(width);
             interior.setHeight(height);
+            interior.specialShape = dimensionType.getPortalShape(tardis).getFlippedWithScaling(1);
             interior.reloadAndSyncToClient();
         }
         return interior;

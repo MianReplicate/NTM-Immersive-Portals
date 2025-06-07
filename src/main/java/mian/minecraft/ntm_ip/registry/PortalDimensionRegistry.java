@@ -20,8 +20,8 @@ public class PortalDimensionRegistry {
     public static final Supplier<IForgeRegistry<PortalDimensionType>> REGISTRY =
             DIMENSION_TYPES.makeRegistry(RegistryBuilder::new);
 
-    public static final RegistryObject<PortalDimensionType> CHAMELEON =
-            registerType(ExteriorRegistry.CHAMELEON, ChameleonType::new);
+//    public static final RegistryObject<PortalDimensionType> CHAMELEON =
+//            registerType(ExteriorRegistry.CHAMELEON, ChameleonType::new);
 
     public static final RegistryObject<PortalDimensionType> STEAM =
             registerType(ExteriorRegistry.STEAM, SteamType::new);

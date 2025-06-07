@@ -39,6 +39,7 @@ public class ChameleonType extends DefaultType {
 
     @Override
     public Vec3 getDestinationToExterior(ITardisLevel level) {
-        return new Vec3(0, 0.2, 0);
+        Direction extDirection = DirectionHelper.getExteriorDirection(level);
+        return new Vec3(0, 0.2, 0).relative(extDirection, 0.8);
     }
 }

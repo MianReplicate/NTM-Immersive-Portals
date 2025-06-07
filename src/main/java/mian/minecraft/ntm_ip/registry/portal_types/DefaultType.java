@@ -66,6 +66,6 @@ public class DefaultType extends PortalDimensionType {
 
     @Override
     public GeometryPortalShape getPortalShape(ITardisLevel level){
-        return null;
+        return new GeometryPortalShape();
     }
 }

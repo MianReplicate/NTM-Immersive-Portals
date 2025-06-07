@@ -32,7 +32,7 @@ public class CoffinType extends DefaultType {
         Direction extDirection = DirectionHelper.getExteriorDirection(level);
         Vec3 extOffset = new Vec3(0, 0.75, 0);
 
-        extOffset = extOffset.relative(extDirection, 0.75);
+        extOffset = extOffset.relative(extDirection, 0.3);
 
         return extOffset;
     }
@@ -40,9 +40,20 @@ public class CoffinType extends DefaultType {
     @Override
     public GeometryPortalShape getPortalShape(ITardisLevel level) {
         GeometryPortalShape shape = new GeometryPortalShape();
-//        shape.addTriangleForRectangle(1, 1, 3, 3);
-        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(1, 2, 1, 1, -1, -1));
-//        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(3, 1, 4, 2, 3, 5));
+        // Form the corner triangles
+        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(-0.28, 1, -0.28, 0.29, -0.6, 0.29));
+        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(0.28, 1, 0.28, 0.29, 0.6, 0.29));
+
+        // the bottom corners
+        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(-0.28, -1.21, -0.28, 0.29, -0.6, 0.29));
+        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(-0.28, -1.21, -0.4, -1.21, -0.6, 0.29));
+
+        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(0.28, -1.21, 0.28, 0.29, 0.6, 0.29));
+        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(0.28, -1.21, 0.4, -1.21, 0.6, 0.29));
+
+        // Form the rectangle between the two triangles
+        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(-0.28, 1, -0.28, -1.21, 0.28, 1));
+        shape.triangles.add(new GeometryPortalShape.TriangleInPlane(0.28, 1, 0.28, -1.21, -0.28, -1.21));
 
         return shape;
     }
