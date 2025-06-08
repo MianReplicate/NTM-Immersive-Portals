@@ -43,11 +43,6 @@ public class BotiPortal extends Portal {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-    }
-
-    @Override
     public boolean isPortalValid() {
         UUID tardisId = getTardisId();
 

@@ -55,7 +55,7 @@ public class NTMIPPortalHelper {
                 width, // width
                 height // height
         );
-        PortalManipulation.rotatePortalBody(portal, DQuaternion.fromMcQuaternion(quat.toMcQuaternion()));
+        PortalManipulation.rotatePortalBody(portal, quat);
 
         return portal;
     }
@@ -74,11 +74,11 @@ public class NTMIPPortalHelper {
     }
 
     public static String createDebugForPortal(Portal portal){
-        return  "Origin:" + portal.getOriginPos().toString() + "\n" +
-                "Dest:" + portal.getDestPos().toString() + "\n" +
-                "Origin Dim:" + portal.getOriginDim().toString() + "\n" +
-                "Dest Dim:" + portal.getDestDim().toString() + "\n" +
-                "Orientation:" + portal.getOrientationRotation().toString() + "\n" +
-                "Rotation:" + (portal.getRotation() != null ? portal.getRotation().toString() : " null");
+        return  "Origin: " + portal.getOriginPos().toString() + "\n" +
+                "Dest: " + portal.getDestPos().toString() + "\n" +
+                "Origin Dim: " + portal.getOriginDim().location() + "\n" +
+                "Dest Dim: " + portal.getDestDim().location() + "\n" +
+                "Orientation: " + portal.getOrientationRotation().toString() + "\n" +
+                "Rotation:" + (portal.getRotation() != null ? portal.getRotation().toString() : "null");
     }
 }

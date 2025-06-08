@@ -2,7 +2,6 @@ package mian.minecraft.ntm_ip;
 
 import com.mojang.logging.LogUtils;
 import mian.minecraft.ntm_ip.event.ForgeEvents;
-import mian.minecraft.ntm_ip.misc.BotiPortalRenderer;
 import mian.minecraft.ntm_ip.registry.IPEntityTypeRegistry;
 import mian.minecraft.ntm_ip.registry.IPMonitorFunctionRegistry;
 import mian.minecraft.ntm_ip.registry.PortalDimensionRegistry;
@@ -15,6 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import qouteall.imm_ptl.core.render.PortalEntityRenderer;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(NTMIP.MODID)
@@ -40,6 +40,6 @@ public class NTMIP {
     @OnlyIn(value = Dist.CLIENT)
     @SubscribeEvent
     public void clientRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerEntityRenderer(IPEntityTypeRegistry.BOTI_PORTAL.get(), BotiPortalRenderer::new);
+        event.registerEntityRenderer(IPEntityTypeRegistry.BOTI_PORTAL.get(), PortalEntityRenderer::new);
     }
 }

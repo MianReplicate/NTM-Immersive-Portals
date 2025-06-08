@@ -11,7 +11,7 @@ import net.tardis.mod.cap.Capabilities;
 public class ForgeEvents {
 
 
-    // Pre events are not called because you can't cancel portal teleports from what I know
+    // Pre events are not called unfortunately
     @SubscribeEvent
     public static void playerDimChange(PlayerEvent.PlayerChangedDimensionEvent event) {
         ServerLevel to = event.getEntity().getServer().getLevel(event.getTo());
