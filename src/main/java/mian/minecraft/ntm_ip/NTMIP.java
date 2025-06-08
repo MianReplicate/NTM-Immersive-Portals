@@ -37,7 +37,6 @@ public class NTMIP {
         PortalDimensionRegistry.register(modEventBus);
     }
 
-    @OnlyIn(value = Dist.CLIENT)
     @SubscribeEvent
     public void clientRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(IPEntityTypeRegistry.BOTI_PORTAL.get(), PortalEntityRenderer::new);
