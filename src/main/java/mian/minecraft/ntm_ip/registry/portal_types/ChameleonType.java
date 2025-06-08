@@ -1,6 +1,6 @@
 package mian.minecraft.ntm_ip.registry.portal_types;
 
-import mian.minecraft.ntm_ip.helper.DirectionHelper;
+import mian.minecraft.ntm_ip.helper.NTMIPDirectionHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.cap.level.ITardisLevel;
@@ -19,7 +19,7 @@ public class ChameleonType extends DefaultType {
 
     @Override
     public Vec3 getInteriorPosition(ITardisLevel level) {
-        Direction intDirection = DirectionHelper.getInteriorDirection(level).getOpposite();
+        Direction intDirection = NTMIPDirectionHelper.getInteriorDirection(level).getOpposite();
         Vec3 intOffset = new Vec3(0, 1.35, 0);
         intOffset = intOffset.relative(intDirection, 0.1);
 
@@ -28,7 +28,7 @@ public class ChameleonType extends DefaultType {
 
     @Override
     public Vec3 getExteriorPosition(ITardisLevel level) {
-        Direction extDirection = DirectionHelper.getExteriorDirection(level);
+        Direction extDirection = NTMIPDirectionHelper.getExteriorDirection(level);
         Vec3 extOffset = new Vec3(0, 0.5, 0);
 
         extOffset = extOffset.relative(extDirection, 0.53);
@@ -38,7 +38,7 @@ public class ChameleonType extends DefaultType {
 
     @Override
     public Vec3 getDestinationToExterior(ITardisLevel level) {
-        Direction extDirection = DirectionHelper.getExteriorDirection(level);
+        Direction extDirection = NTMIPDirectionHelper.getExteriorDirection(level);
         return new Vec3(0, 0.2, 0).relative(extDirection, 0.8);
     }
 }

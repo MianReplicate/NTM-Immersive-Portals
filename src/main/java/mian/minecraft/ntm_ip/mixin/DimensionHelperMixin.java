@@ -1,7 +1,7 @@
 package mian.minecraft.ntm_ip.mixin;
 
 import mian.minecraft.ntm_ip.NTMIP;
-import mian.minecraft.ntm_ip.helper.Helper;
+import mian.minecraft.ntm_ip.helper.NTMIPHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -21,6 +21,6 @@ public class DimensionHelperMixin {
     private static void addToImmersivePortalsDimAPI(MinecraftServer server, ResourceKey<Level> worldKey, BiFunction<MinecraftServer, ResourceKey<LevelStem>, LevelStem> dimensionFactory, CallbackInfoReturnable<ServerLevel> cir) {
         NTMIP.LOGGER.info("A new TARDIS dimension was created. Adding it to Immersive Portal's world map: " + worldKey.location().getPath());
 
-        Helper.updateKnownDimensions(server, worldKey);
+        NTMIPHelper.updateKnownDimensions(server, worldKey);
     }
 }

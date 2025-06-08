@@ -1,7 +1,7 @@
 package mian.minecraft.ntm_ip.registry;
 
 import mian.minecraft.ntm_ip.NTMIP;
-import mian.minecraft.ntm_ip.helper.Helper;
+import mian.minecraft.ntm_ip.helper.NTMIPHelper;
 import mian.minecraft.ntm_ip.misc.BotiPortal;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -15,7 +15,7 @@ public class IPEntityTypeRegistry {
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, NTMIP.MODID);
 
     public static final RegistryObject<EntityType<BotiPortal>> BOTI_PORTAL = ENTITY_TYPES.register("boti_portal", () ->
-            EntityType.Builder.of(BotiPortal::new, MobCategory.MISC).build(Helper.createRL("boti_portal").toString()));
+            EntityType.Builder.of(BotiPortal::new, MobCategory.MISC).build(NTMIPHelper.createRL("boti_portal").toString()));
 
     public static void register(IEventBus eventBus) {
         NTMIP.LOGGER.info("Registering entity types");

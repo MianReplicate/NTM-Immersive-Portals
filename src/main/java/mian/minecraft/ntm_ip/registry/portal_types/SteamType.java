@@ -1,6 +1,6 @@
 package mian.minecraft.ntm_ip.registry.portal_types;
 
-import mian.minecraft.ntm_ip.helper.DirectionHelper;
+import mian.minecraft.ntm_ip.helper.NTMIPDirectionHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.Vec3;
 import net.tardis.mod.cap.level.ITardisLevel;
@@ -19,7 +19,7 @@ public class SteamType extends DefaultType {
 
     @Override
     public Vec3 getInteriorPosition(ITardisLevel level) {
-        Direction intDirection = DirectionHelper.getInteriorDirection(level).getOpposite();
+        Direction intDirection = NTMIPDirectionHelper.getInteriorDirection(level).getOpposite();
         Vec3 intOffset = new Vec3(0, 1.3, 0);
         intOffset = intOffset.relative(intDirection, 0.4);
 
@@ -28,7 +28,7 @@ public class SteamType extends DefaultType {
 
     @Override
     public Vec3 getExteriorPosition(ITardisLevel level) {
-        Direction extDirection = DirectionHelper.getExteriorDirection(level);
+        Direction extDirection = NTMIPDirectionHelper.getExteriorDirection(level);
         Vec3 extOffset = new Vec3(0, 0.75, 0);
 
         extOffset = extOffset.relative(extDirection, 0.75);

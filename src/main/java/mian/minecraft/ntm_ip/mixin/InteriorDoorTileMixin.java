@@ -4,11 +4,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import mian.minecraft.ntm_ip.misc.Portals;
+import mian.minecraft.ntm_ip.misc.NTMIPPortals;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.tardis.mod.blockentities.InteriorDoorTile;
-import net.tardis.mod.blockentities.exteriors.ExteriorTile;
 import net.tardis.mod.cap.Capabilities;
 import net.tardis.mod.cap.level.ITardisLevel;
 import net.tardis.mod.helpers.WorldHelper;
@@ -31,7 +29,7 @@ public class InteriorDoorTileMixin {
         ITardisLevel tardis = tardisLevel.getCapability(Capabilities.TARDIS).orElse(null);
 
         // only main interior door get portals (the reason being it's too laggy to do all of them)
-        if (Portals.getPortalsForTardis(tardis).isEmpty()
+        if (NTMIPPortals.getPortalsForTardis(tardis).isEmpty()
                 || tardis == null
                 || (tardis != null && (
                 !tardis.getInteriorManager().getMainInteriorDoor().getPosition(tardisLevel)

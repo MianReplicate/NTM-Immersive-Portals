@@ -16,13 +16,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
-//TODO: Current Bugs
-// for some reason the car exterior jsut doesnt allow the exterior portal to be removed idk :sob:
-// maybe make portal visible during flight and have it go to vortex?
-// implement rotations perhaps
-// implement support for car exterior?
-// make first go into tardis audio nto happen constantly
-
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(NTMIP.MODID)
 public class NTMIP {

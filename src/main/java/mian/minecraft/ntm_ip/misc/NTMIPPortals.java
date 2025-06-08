@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class Portals {
+public class NTMIPPortals {
     public static HashMap<UUID, List<BotiPortal>> tardisToPortals = new HashMap<>();
 
     public static List<BotiPortal> getPortalsForTardis(ITardisLevel tardis) {

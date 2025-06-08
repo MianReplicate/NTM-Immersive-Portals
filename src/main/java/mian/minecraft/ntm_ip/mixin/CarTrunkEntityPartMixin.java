@@ -2,11 +2,10 @@ package mian.minecraft.ntm_ip.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import mian.minecraft.ntm_ip.misc.Portals;
+import mian.minecraft.ntm_ip.misc.NTMIPPortals;
 import net.minecraft.server.level.ServerLevel;
 import net.tardis.mod.blockentities.InteriorDoorTile;
 import net.tardis.mod.cap.level.ITardisLevel;
-import net.tardis.mod.entity.CarExteriorEntity;
 import net.tardis.mod.entity.CarTrunkEntityPart;
 import net.tardis.mod.misc.TeleportHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,9 +17,9 @@ public class CarTrunkEntityPartMixin {
     private void ntm_immersive_portals$tick(TeleportHandler<InteriorDoorTile> instance,
                                             ServerLevel level,
                                             Operation<Void> original) {
-        ITardisLevel tardis = ((CarTrunkEntityPart<?>)(Object) this).getParent()
+        ITardisLevel tardis = ((CarTrunkEntityPart<?>) (Object) this).getParent()
                 .cachedTardis;
-        if (tardis == null || Portals.getPortalsForTardis(tardis).isEmpty())
+        if (tardis == null || NTMIPPortals.getPortalsForTardis(tardis).isEmpty())
             original.call(instance, level);
     }
 }

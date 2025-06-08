@@ -1,8 +1,8 @@
 package mian.minecraft.ntm_ip.event;
 
-import mian.minecraft.ntm_ip.helper.Helper;
+import mian.minecraft.ntm_ip.helper.NTMIPHelper;
 import mian.minecraft.ntm_ip.misc.BotiPortal;
-import mian.minecraft.ntm_ip.misc.Portals;
+import mian.minecraft.ntm_ip.misc.NTMIPPortals;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,17 +18,17 @@ public class ForgeEvents {
         ServerLevel from = event.getEntity().getServer().getLevel(event.getFrom());
         if (to != null) {
             to.getCapability(Capabilities.TARDIS).ifPresent(tardis -> {
-                if (Portals.getPortalsForTardis(tardis).stream().anyMatch(portal -> !portal.getIsInterior())) {
+                if (NTMIPPortals.getPortalsForTardis(tardis).stream().anyMatch(portal -> !portal.getIsInterior())) {
                     // since pre isn't called for portals
-                    Helper.teleportFollowers(tardis, event.getEntity(), from, tardis.getLocation().getPos());
+                    NTMIPHelper.teleportFollowers(tardis, event.getEntity(), from, tardis.getLocation().getPos());
                 }
             });
         }
 
         if (from != null) {
             from.getCapability(Capabilities.TARDIS).ifPresent(tardis ->
-                    Portals.getPortalsForTardis(tardis).stream().filter(BotiPortal::getIsInterior).findFirst().ifPresent(portal ->
-                            Helper.teleportFollowers(tardis, event.getEntity(), from, portal.getOnPos())));
+                    NTMIPPortals.getPortalsForTardis(tardis).stream().filter(BotiPortal::getIsInterior).findFirst().ifPresent(portal ->
+                            NTMIPHelper.teleportFollowers(tardis, event.getEntity(), from, portal.getOnPos())));
         }
     }
 }

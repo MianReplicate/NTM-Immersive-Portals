@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import mian.minecraft.ntm_ip.misc.Portals;
+import mian.minecraft.ntm_ip.misc.NTMIPPortals;
 import net.minecraft.server.level.ServerLevel;
 import net.tardis.mod.blockentities.InteriorDoorTile;
 import net.tardis.mod.blockentities.exteriors.ExteriorTile;
@@ -27,7 +27,7 @@ public abstract class ExteriorTileMixin {
                                                    Operation<Void> original,
                                                    @Local(argsOnly = true) LocalRef<ExteriorTile> exteriorTileRef) {
         ITardisLevel tardis = exteriorTileRef.get().getTardis().orElse(null);
-        if (tardis == null || Portals.getPortalsForTardis(tardis).isEmpty())
+        if (tardis == null || NTMIPPortals.getPortalsForTardis(tardis).isEmpty())
             original.call(instance, level);
     }
 }

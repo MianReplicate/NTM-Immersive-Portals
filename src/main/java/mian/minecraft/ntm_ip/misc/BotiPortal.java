@@ -52,8 +52,7 @@ public class BotiPortal extends Portal {
         UUID tardisId = getTardisId();
 
         if (level() instanceof ServerLevel) {
-            List<BotiPortal> portalList = Portals.getPortalsForTardis(tardisId);
-//            NTMIP.LOGGER.info(String.valueOf(portalList.size()));
+            List<BotiPortal> portalList = NTMIPPortals.getPortalsForTardis(tardisId);
             if (portalList.stream().filter(portal -> portal.getUUID() == this.getUUID()).findAny().isEmpty()
                     && !this.level().isClientSide)
                 return false;

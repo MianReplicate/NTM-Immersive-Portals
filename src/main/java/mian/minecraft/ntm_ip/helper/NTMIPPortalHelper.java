@@ -16,7 +16,7 @@ import qouteall.q_misc_util.my_util.DQuaternion;
 
 import java.util.UUID;
 
-public class PortalHelper {
+public class NTMIPPortalHelper {
     public static void removePortal(ServerLevel level, UUID portalID) {
         Entity portal = level.getEntity(portalID);
         if (portal instanceof Portal portal1 && portal1 != null && portal1.isAlive())
@@ -71,5 +71,14 @@ public class PortalHelper {
 
         if (bRotation == null || !bRotation.equals(b.getRotation()))
             b.reloadAndSyncToClient();
+    }
+
+    public static String createDebugForPortal(Portal portal){
+        return  "Origin:" + portal.getOriginPos().toString() + "\n" +
+                "Dest:" + portal.getDestPos().toString() + "\n" +
+                "Origin Dim:" + portal.getOriginDim().toString() + "\n" +
+                "Dest Dim:" + portal.getDestDim().toString() + "\n" +
+                "Orientation:" + portal.getOrientationRotation().toString() + "\n" +
+                "Rotation:" + (portal.getRotation() != null ? portal.getRotation().toString() : " null");
     }
 }

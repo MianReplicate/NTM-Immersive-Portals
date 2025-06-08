@@ -1,8 +1,8 @@
 package mian.minecraft.ntm_ip.registry;
 
 import mian.minecraft.ntm_ip.NTMIP;
-import mian.minecraft.ntm_ip.helper.Constants;
-import mian.minecraft.ntm_ip.helper.Helper;
+import mian.minecraft.ntm_ip.helper.NTMIPConstants;
+import mian.minecraft.ntm_ip.helper.NTMIPHelper;
 import mian.minecraft.ntm_ip.registry.portal_types.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
 
 public class PortalDimensionRegistry {
     public static final DeferredRegister<PortalDimensionType>
-            DIMENSION_TYPES = DeferredRegister.create(Helper.createRL(Constants.PORTAL_REGISTRY), NTMIP.MODID);
+            DIMENSION_TYPES = DeferredRegister.create(NTMIPHelper.createRL(NTMIPConstants.PORTAL_REGISTRY), NTMIP.MODID);
 
     public static final Supplier<IForgeRegistry<PortalDimensionType>> REGISTRY =
             DIMENSION_TYPES.makeRegistry(RegistryBuilder::new);
@@ -38,8 +38,8 @@ public class PortalDimensionRegistry {
             registerType(ExteriorRegistry.COFFIN, CoffinType::new);
 
     // it's a fucking moving car
-    public static final RegistryObject<PortalDimensionType> IMPALA =
-            registerType(ExteriorRegistry.IMPALA, SteamType::new);
+//    public static final RegistryObject<PortalDimensionType> IMPALA =
+//            registerType(ExteriorRegistry.IMPALA, SteamType::new);
 
     public static final RegistryObject<PortalDimensionType> OCTA =
             registerType(ExteriorRegistry.OCTA, OctaType::new);

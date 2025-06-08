@@ -8,7 +8,7 @@ import net.tardis.mod.blockentities.exteriors.ExteriorTile;
 import net.tardis.mod.cap.level.ITardisLevel;
 import net.tardis.mod.helpers.WorldHelper;
 
-public class DirectionHelper {
+public class NTMIPDirectionHelper {
     public static Direction getExteriorDirection(ITardisLevel tardis) {
         BlockEntity entity = ((ServerLevel) tardis.getLevel()).getServer().getLevel(tardis.getLocation().getLevel()).getBlockEntity(tardis.getLocation().getPos());
 
