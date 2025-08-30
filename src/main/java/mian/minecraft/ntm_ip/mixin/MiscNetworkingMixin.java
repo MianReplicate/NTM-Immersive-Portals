@@ -27,7 +27,7 @@ public class MiscNetworkingMixin {
      * @reason this is kinda hacky but i can't really find another way for immersive portals to stop crashing
      */
     @OnlyIn(Dist.CLIENT)
-    @Overwrite()
+    @Overwrite(remap = false)
     private static void processDimSync(FriendlyByteBuf buf, ClientGamePacketListener packetListener) {
         CompoundTag idMap = buf.readNbt();
         DimensionIdRecord.clientRecord = DimensionIdRecord.tagToRecord(idMap);

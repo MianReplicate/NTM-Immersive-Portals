@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Mixin(EntityExterior.class)
 public class EntityExteriorMixin implements PublicEntityExterior {
-    @Shadow
+    @Shadow(remap = false)
     private UUID exteriorID;
 
     @Override

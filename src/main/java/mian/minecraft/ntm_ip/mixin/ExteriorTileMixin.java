@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Mixin(ExteriorTile.class)
 public abstract class ExteriorTileMixin {
-    @Shadow
+    @Shadow(remap = false)
     public abstract Optional<ITardisLevel> getTardis();
 
     @WrapOperation(remap = false, method = "tick", at = @At(target = "Lnet/tardis/mod/misc/TeleportHandler;tick(Lnet/minecraft/server/level/ServerLevel;)V", value = "INVOKE"))

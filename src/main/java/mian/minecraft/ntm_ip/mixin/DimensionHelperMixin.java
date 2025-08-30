@@ -17,7 +17,7 @@ import java.util.function.BiFunction;
 
 @Mixin(DimensionHelper.class)
 public class DimensionHelperMixin {
-    @Inject(method = "getOrCreateWorld", at = @At(value = "RETURN", ordinal = 1))
+    @Inject(method = "getOrCreateWorld", at = @At(value = "RETURN", ordinal = 1), remap = false)
     private static void addToImmersivePortalsDimAPI(MinecraftServer server, ResourceKey<Level> worldKey, BiFunction<MinecraftServer, ResourceKey<LevelStem>, LevelStem> dimensionFactory, CallbackInfoReturnable<ServerLevel> cir) {
         NTMIP.LOGGER.info("A new TARDIS dimension was created. Adding it to Immersive Portal's world map: " + worldKey.location().getPath());
 

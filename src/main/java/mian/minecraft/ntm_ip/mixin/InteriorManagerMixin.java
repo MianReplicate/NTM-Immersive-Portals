@@ -41,14 +41,14 @@ import java.util.UUID;
 
 @Mixin(InteriorManager.class)
 public abstract class InteriorManagerMixin implements Portalable {
-    @Shadow
+    @Shadow(remap = false)
     @Final
     private ITardisLevel tardis;
 
-    @Shadow
+    @Shadow(remap = false)
     public abstract DoorHandler getDoorHandler();
 
-    @Shadow
+    @Shadow(remap = false)
     private HashMap<UUID, InteriorDoorData> interiorDoorPositions;
 
     @Unique
@@ -57,12 +57,12 @@ public abstract class InteriorManagerMixin implements Portalable {
     }
 
     @Redirect(method = "getMainInteriorDoor", at = @At(value = "INVOKE",
-            target = "Lorg/apache/logging/log4j/Logger;log(Lorg/apache/logging/log4j/Level;Ljava/lang/String;)V"))
+            target = "Lorg/apache/logging/log4j/Logger;log(Lorg/apache/logging/log4j/Level;Ljava/lang/String;)V"), remap = false)
     public void getMainInteriorDoor(Logger instance, org.apache.logging.log4j.Level level, String s) {
         // shut the fuck up i dont care how you got the main interior door
     }
 
-    @Inject(method = "tick", at = @At(value = "TAIL"))
+    @Inject(method = "tick", at = @At(value = "TAIL"), remap = false)
     public void ntm_immersive_portals$tick(CallbackInfo ci) {
         if (tardis.isClient())
             return;
