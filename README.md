@@ -1,4 +1,4 @@
-<img src="https://i.imgur.com/gBVSU6U.png">
+<img src="https://i.imgur.com/gBVSU6U.png" alt = "Logo">
 
 # NTM Immersive Portals
 **....is a Minecraft mod that makes the TARDIS in NTM use Immersive Portals for a bigger on the inside effect with seamless transitions!**
@@ -7,7 +7,7 @@
 
 **This mod needs to be installed on _BOTH_ the _SERVER_ and the _CLIENT_!**
 
-<img src="https://i.imgur.com/IW7tznS.gif">
+<img src="https://i.imgur.com/IW7tznS.gif" alt = "Short video example of mod">
 
 ### ➕ Features
 
