@@ -4,6 +4,7 @@ import mian.minecraft.ntm_ip.api.ExteriorDataHandlerImpl;
 import net.minecraft.nbt.CompoundTag;
 import net.tardis.mod.misc.tardis.ExteriorDataHandler;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,7 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ExteriorDataHandler.class)
-public class ExteriorDataHandlerMixin implements ExteriorDataHandlerImpl {
+public abstract class ExteriorDataHandlerMixin implements ExteriorDataHandlerImpl {
+    @Shadow public abstract void update();
+
     @Unique
     private boolean ntm_immersive_portals$botiEnabled = true;
 
@@ -23,8 +26,7 @@ public class ExteriorDataHandlerMixin implements ExteriorDataHandlerImpl {
 
     @Inject(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At(value = "TAIL"), remap = false)
     private void ntm_immersive_portals$deserializeNBT(CompoundTag tag, CallbackInfo ci) {
-        if (tag.contains("boti_enabled"))
-            ntm_immersive_portals$setBOTIEnabled(tag.getBoolean("boti_enabled"));
+        ntm_immersive_portals$setBOTIEnabled(tag.getBoolean("boti_enabled"));
     }
 
     @Override
@@ -35,5 +37,6 @@ public class ExteriorDataHandlerMixin implements ExteriorDataHandlerImpl {
     @Override
     public void ntm_immersive_portals$setBOTIEnabled(boolean enabled) {
         ntm_immersive_portals$botiEnabled = enabled;
+        this.update();
     }
 }

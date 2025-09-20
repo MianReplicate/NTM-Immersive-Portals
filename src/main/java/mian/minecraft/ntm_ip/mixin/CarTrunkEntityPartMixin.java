@@ -13,13 +13,15 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(CarTrunkEntityPart.class)
 public class CarTrunkEntityPartMixin {
-    @WrapOperation(remap = false, method = "tick", at = @At(target = "Lnet/tardis/mod/misc/TeleportHandler;tick(Lnet/minecraft/server/level/ServerLevel;)V", value = "INVOKE"))
-    private void ntm_immersive_portals$tick(TeleportHandler<InteriorDoorTile> instance,
-                                            ServerLevel level,
-                                            Operation<Void> original) {
-        ITardisLevel tardis = ((CarTrunkEntityPart<?>) (Object) this).getParent()
-                .cachedTardis;
-        if (tardis == null || NTMIPPortals.getPortalsForTardis(tardis).isEmpty())
-            original.call(instance, level);
-    }
+    // wtv i guess this class doesnt really matter for now
+
+//    @WrapOperation(remap = false, method = "tick", at = @At(target = "Lnet/tardis/mod/misc/TeleportHandler;tick(Lnet/minecraft/server/level/ServerLevel;)V", value = "INVOKE"))
+//    private void ntm_immersive_portals$tick(TeleportHandler<InteriorDoorTile> instance,
+//                                            ServerLevel level,
+//                                            Operation<Void> original) {
+//        ITardisLevel tardis = ((CarTrunkEntityPart<?>) (Object) this).getParent()
+//                .cachedTardis;
+//        if (tardis == null || NTMIPPortals.getPortalsForTardis(tardis).isEmpty())
+//            original.call(instance, level);
+//    }
 }

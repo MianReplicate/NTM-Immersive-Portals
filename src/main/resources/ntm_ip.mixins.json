@@ -12,7 +12,8 @@
     "ExteriorTileMixin",
     "InteriorDoorTileMixin",
     "InteriorManagerMixin",
-    "MiscNetworkingMixin"
+    "MiscNetworkingMixin",
+    "TardisExteriorExtraDataMixin"
   ],
   "client": [
     "ClientEventsMixin"
