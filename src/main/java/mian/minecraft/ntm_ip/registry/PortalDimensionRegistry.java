@@ -24,7 +24,6 @@ public class PortalDimensionRegistry {
     public static final Supplier<IForgeRegistry<PortalDimensionType>> REGISTRY =
             DIMENSION_TYPES.makeRegistry(RegistryBuilder::new);
 
-    // Chameleon has a weird black box in front of exit
 //    public static final RegistryObject<PortalDimensionType> CHAMELEON =
 //            registerType(ExteriorRegistry.CHAMELEON, ChameleonType::new);
 

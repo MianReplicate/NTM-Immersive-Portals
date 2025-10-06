@@ -35,10 +35,4 @@ public class ChameleonType extends DefaultType {
 
         return extOffset;
     }
-
-    @Override
-    public Vec3 getDestinationToExterior(ITardisLevel level) {
-        Direction extDirection = NTMIPDirectionHelper.getExteriorDirection(level);
-        return new Vec3(0, 0.2, 0).relative(extDirection, 0.8);
-    }
 }

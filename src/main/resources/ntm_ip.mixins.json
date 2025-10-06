@@ -16,6 +16,7 @@
     "TardisExteriorExtraDataMixin"
   ],
   "client": [
+    "ExteriorRenderMixin",
     "ClientEventsMixin"
   ],
   "injectors": {
