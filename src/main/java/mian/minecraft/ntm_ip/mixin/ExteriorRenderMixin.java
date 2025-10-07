@@ -12,6 +12,7 @@ import qouteall.imm_ptl.core.render.context_management.WorldRenderInfo;
 
 @Mixin(ExteriorRenderer.class)
 public abstract class ExteriorRenderMixin<T extends ExteriorTile> {
+
     @Inject(remap = false, at = @At("HEAD"), method = "render(Lnet/tardis/mod/blockentities/exteriors/ExteriorTile;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V", cancellable = true)
     public void shouldRender(T pBlockEntity, float pPartialTick, PoseStack pose, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay, CallbackInfo ci){
         if(WorldRenderInfo.isRendering()

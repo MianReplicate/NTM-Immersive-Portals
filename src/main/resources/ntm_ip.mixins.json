@@ -17,6 +17,7 @@
   ],
   "client": [
     "ExteriorRenderMixin",
+    "InteriorRenderMixin",
     "ClientEventsMixin"
   ],
   "injectors": {
