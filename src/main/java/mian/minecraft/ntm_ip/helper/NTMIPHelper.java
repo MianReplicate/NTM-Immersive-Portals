@@ -40,7 +40,7 @@ import qouteall.q_misc_util.forge.events.ServerDimensionDynamicUpdateEvent;
 
 public class NTMIPHelper {
     public static ResourceLocation createRL(String path) {
-        return ResourceLocation.fromNamespaceAndPath(NTMIP.MODID, path);
+        return new ResourceLocation(NTMIP.MODID, path);
     }
 
     public static void updateKnownDimensions(MinecraftServer server, ResourceKey<Level> worldKey) {
